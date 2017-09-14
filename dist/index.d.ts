@@ -1,3 +1,6 @@
+/**
+ * The template type of dictionary.
+ */
 export interface IDictionary<T> {
     [key: string]: T;
 }
