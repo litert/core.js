@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v0.1.2
+
+- Remove dependency of `@types/node`.
+
 ## v0.1.1
 
 - Improved NPM commands for project.

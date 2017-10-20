@@ -1,6 +1,6 @@
 {
   "name": "@litert/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The core of LiteRT.",
   "main": "dist/index.js",
   "scripts": {
@@ -11,12 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/litert/http.js.git"
+    "url": "git+https://github.com/litert/core.js.git"
   },
   "bugs": {
-    "url": "https://github.com/litert/http.js/issues"
+    "url": "https://github.com/litert/core.js/issues"
   },
-  "homepage": "https://github.com/litert/http.js#readme",
+  "homepage": "https://github.com/litert/core.js#readme",
   "keywords": [
     "litert",
     "lrt",
@@ -27,7 +27,6 @@
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
   "devDependencies": {
-    "@types/node": "^8.0.28",
     "typescript": "^2.5.2"
   }
 }
