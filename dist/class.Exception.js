@@ -18,6 +18,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * This class provides the default exception class for LiteRT.
  */
 class Exception {
+    get type() {
+        return this._type;
+    }
     /**
      * The code to identify the type of this exception.
      */
@@ -41,13 +44,14 @@ class Exception {
         this._message = message;
     }
     __toString() {
-        return `Error(${this._errno}): ${this.message}`;
+        return `Error(${this._type} ${this._errno}): ${this.message}`;
     }
     /**
      * Convert this exception into JSON string.
      */
     toJSON() {
         return JSON.stringify({
+            "type": this._type,
             "error": this._errno,
             "message": this._message
         });

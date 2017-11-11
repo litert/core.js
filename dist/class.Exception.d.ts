@@ -1,9 +1,11 @@
 /**
  * This class provides the default exception class for LiteRT.
  */
-export declare class Exception {
+export declare abstract class Exception {
     protected _errno: number;
     protected _message: string;
+    protected _type: string;
+    readonly type: string;
     /**
      * The code to identify the type of this exception.
      */

@@ -16,11 +16,18 @@
 /**
  * This class provides the default exception class for LiteRT.
  */
-export class Exception {
+export abstract class Exception {
 
     protected _errno: number;
 
     protected _message: string;
+
+    protected _type: string;
+
+    public get type(): string {
+
+        return this._type;
+    }
 
     /**
      * The code to identify the type of this exception.
@@ -52,7 +59,7 @@ export class Exception {
 
     public __toString(): string {
 
-        return `Error(${this._errno}): ${this.message}`;
+        return `Error(${this._type} ${this._errno}): ${this.message}`;
     }
 
     /**
@@ -61,6 +68,7 @@ export class Exception {
     public toJSON(): string {
 
         return JSON.stringify({
+            "type": this._type,
             "error": this._errno,
             "message": this._message
         });

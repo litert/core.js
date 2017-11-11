@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v0.2.0
+
+- Added required property **type** for Exception class.
+
 ## v0.1.2
 
 - Remove dependency of `@types/node`.

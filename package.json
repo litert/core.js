@@ -1,6 +1,6 @@
 {
   "name": "@litert/core",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "The core of LiteRT.",
   "main": "dist/index.js",
   "scripts": {
@@ -27,6 +27,6 @@
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
   "devDependencies": {
-    "typescript": "^2.5.2"
+    "typescript": "^2.6.1"
   }
 }
