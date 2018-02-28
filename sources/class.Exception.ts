@@ -22,7 +22,14 @@ export abstract class Exception {
 
     protected _message: string;
 
-    protected _type: string;
+    protected _type!: string;
+
+    protected _origin: any;
+
+    public get origin(): any {
+
+        return this._origin;
+    }
 
     public get type(): string {
 
@@ -51,10 +58,11 @@ export abstract class Exception {
      * @param error The code to identify the type of this exception.
      * @param message The description about this exception.
      */
-    public constructor(error: number, message: string) {
+    public constructor(error: number, message: string, origin?: any) {
 
         this._errno = error;
         this._message = message;
+        this._origin = origin;
     }
 
     public __toString(): string {

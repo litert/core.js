@@ -36,14 +36,14 @@ export class RawPromise<T = void, E = Error> {
      *
      * If this method is called, promise will be REJECTED.
      */
-    public reject: IPromiseRejector<E>;
+    public reject!: IPromiseRejector<E>;
 
     /**
      * The Promise resolver method.
      *
      * If this method is called, promise will be RESOLVED.
      */
-    public resolve: IPromiseResolver<T>;
+    public resolve!: IPromiseResolver<T>;
 
     /**
      * The Promise object.
