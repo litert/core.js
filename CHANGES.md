@@ -1,5 +1,10 @@
 # Changes Logs
 
+## v0.3.1
+
+- Fixed method **toString** for Exception class.
+- Fixed serialization of property **origin** for Exception class.
+
 ## v0.3.0
 
 - Upgrade to TypeScript 2.7.

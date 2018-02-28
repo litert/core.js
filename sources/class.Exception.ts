@@ -65,7 +65,7 @@ export abstract class Exception {
         this._origin = origin;
     }
 
-    public __toString(): string {
+    public toString(): string {
 
         return `Error(${this._type} ${this._errno}): ${this.message}`;
     }
@@ -78,7 +78,8 @@ export abstract class Exception {
         return JSON.stringify({
             "type": this._type,
             "error": this._errno,
-            "message": this._message
+            "message": this._message,
+            "origin": this._origin
         });
     }
 }
