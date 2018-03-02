@@ -62,7 +62,7 @@ export abstract class Exception {
 
         this._errno = error;
         this._message = message;
-        this._origin = origin;
+        this._origin = origin || new Error("TRACE");
     }
 
     public toString(): string {

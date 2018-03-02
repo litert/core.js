@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v0.3.2
+
+- Added the default value of **origin** for Exception class.
+
 ## v0.3.1
 
 - Fixed method **toString** for Exception class.
