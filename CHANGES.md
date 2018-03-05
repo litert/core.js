@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v0.3.3
+
+- Added the signature for class/method annotation functions.
+
 ## v0.3.2
 
 - Added the default value of **origin** for Exception class.

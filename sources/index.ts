@@ -21,6 +21,12 @@ export interface IDictionary<T> {
     [key: string]: T;
 }
 
+export type ClassDecorator = (target: Function) => void;
+
+export type MethodDecorator = (
+    target: Object, property: string | symbol
+) => void;
+
 export * from "./class.Exception";
 
 export * from "./class.RawPromise";
