@@ -14,23 +14,17 @@
  */
 
 /**
- * The template type of dictionary.
+ * Sleep for determined time and then wake up.
+ *
+ * NOTE: This method SHOULD never fail because timer wouldn't be cancelled.
+ *
+ * @param ms Milliseconds to wait
+ * @param args The result of promise resolved.
  */
-export interface IDictionary<T> {
+export function sleep(
+    ms: number,
+    ...args: any[]
+): Promise<any[]> {
 
-    [key: string]: T;
+    return new Promise<any[]>((resolve) => setTimeout(resolve, ms, args));
 }
-
-export type ClassDecorator = (target: Function) => void;
-
-export type MethodDecorator = (
-    target: Object, property: string | symbol
-) => void;
-
-export * from "./class.Exception";
-
-export * from "./class.RawPromise";
-
-import * as Async from "./utilities.async";
-
-export { Async };

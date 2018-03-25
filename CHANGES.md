@@ -1,5 +1,12 @@
 # Changes Logs
 
+## v0.4.0
+
+- Now the **origin** only stand for the data carried by Exception.
+- Added the property **trace** for Exception to get the trace.
+- New method **is** helps determine if an error object is of LiteRT's exception.
+- Added asynchronous utility function **sleep**.
+
 ## v0.3.3
 
 - Added the signature for class/method annotation functions.
