@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v0.4.1
+
+- Fixed the bug that trace of Exception is not exact from caller.
+
 ## v0.4.0
 
 - Now the **origin** only stand for the data carried by Exception.

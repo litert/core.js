@@ -83,7 +83,7 @@ export abstract class Exception {
         this._errno = error;
         this._message = message;
         this._origin = origin;
-        this._trace = (new Error().stack as string).split(/\s+at\s+/).slice(2);
+        this._trace = (new Error().stack as string).split(/\s+at\s+/).slice(3);
 
         /**
          * this._type should be defined in the sub classes.
