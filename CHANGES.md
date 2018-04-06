@@ -1,5 +1,13 @@
 # Changes Logs
 
+## v0.5.0
+
+- Added new semantic types `Nullable` and `Optional`, `Dict`.
+- Now the `IDictionary` is the alias of `Dict`, and has been mark as
+  `deprecated`. It will be removed in v1.0.0.
+- Added valitators utility function **isEMailAddress**.
+- Added valitators utility function **isDomain**.
+
 ## v0.4.1
 
 - Fixed the bug that trace of Exception is not exact from caller.

@@ -13,49 +13,36 @@
    +----------------------------------------------------------------------+
  */
 
-/**
- * The template type of dictionary.
- */
-export interface Dict<T> {
+const DOMAIN_REGEXP = /^[a-z0-9][-a-z0-9]{0,62}(\.[a-z0-9][-a-z0-9]{0,62})*$/i;
 
-    [key: string]: T;
+const DOMAIN_MAX_LENGTH = 255;
+
+const EMAIL_REGEXP = /^[-+_a-z0-9][-+_\.a-z0-9]{0,62}@[a-z0-9][-a-z0-9]{0,62}(\.[a-z0-9][-a-z0-9]{0,62})*$/i;
+
+const EMAIL_MAX_LENGTH = 255;
+
+/**
+ * Validate if the input string is a domain.
+ *
+ * @param domain The string to be validated.
+ */
+export function isDomain(domain: string): boolean {
+
+    return domain.length < DOMAIN_MAX_LENGTH &&
+           DOMAIN_REGEXP.test(domain);
 }
 
 /**
- * The template type of dictionary.
+ * Validate if the input string is an E-Mail address.
  *
- * @deprecated Use `Dict` instead. This will be removed in v1.0.0.
+ * Not exactly matches the RFC, but for most usage.
+ *
+ * @param email The string to be validated.
  */
-export type IDictionary<T> = Dict<T>;
+export function isEMailAddress(email: string): boolean {
 
-/**
- * Semantically stressing an nullable type.
- */
-export type Nullable<T> = T | null;
-
-/**
- * Semantically stressing an optional type.
- */
-export type Optional<T> = T | undefined;
-
-/**
- * The signature of decorator for classes.
- */
-export type ClassDecorator = (target: Function) => void;
-
-/**
- * The signature of decorator for methods.
- */
-export type MethodDecorator = (
-    target: Object, property: string | symbol
-) => void;
-
-export * from "./class.Exception";
-
-export * from "./class.RawPromise";
-
-import * as Async from "./utilities.async";
-
-import * as Validators from "./utilities.validators";
-
-export { Async, Validators };
+    return email.length < EMAIL_MAX_LENGTH &&
+           EMAIL_REGEXP.test(email) &&
+           email.indexOf("..") === -1 &&
+           email.indexOf(".@") === -1;
+}
