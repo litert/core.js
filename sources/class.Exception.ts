@@ -120,6 +120,13 @@ export abstract class Exception {
      */
     public static is(e: any, type?: string): e is Exception {
 
-        return e instanceof Exception && (type === void 0 || type === e.type);
+        return e && (
+            e instanceof Exception || (
+                typeof e._type === "string" &&
+                typeof e._error === "number" &&
+                typeof e._message === "string" &&
+                typeof e._trace === "object"
+            )
+        ) && (type === void 0 || type === e.type);
     }
 }

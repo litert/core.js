@@ -54,6 +54,8 @@ export * from "./class.Exception";
 
 export * from "./class.RawPromise";
 
+export * from "./class.TimeoutPromise";
+
 import * as Async from "./utilities.async";
 
 import * as Validators from "./utilities.validators";

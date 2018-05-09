@@ -1,5 +1,10 @@
 # Changes Logs
 
+## v0.6.0
+
+- Added new utility class `TimeoutPromise`.
+- Improved the judegement of `Exception.is`.
+
 ## v0.5.0
 
 - Added new semantic types `Nullable` and `Optional`, `Dict`.
