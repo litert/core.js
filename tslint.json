@@ -17,7 +17,8 @@
         "object-literal-sort-keys": false,
         "one-line": [false],
         "object-literal-key-quotes": [false],
-        "ban-types": false
+        "ban-types": false,
+        "only-arrow-functions": false
     },
     "rulesDirectory": []
 }

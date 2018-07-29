@@ -1,8 +1,8 @@
 {
   "name": "@litert/core",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "The core of LiteRT.",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "prepare": "npm run rebuild",
     "build": "tsc -p .",
@@ -26,9 +26,9 @@
   ],
   "author": "Angus.Fenying <fenying@litert.org> (https://fenying.net)",
   "license": "Apache-2.0",
-  "typings": "dist/index.d.ts",
-  "types": "dist/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "types": "lib/index.d.ts",
   "devDependencies": {
-    "typescript": "^2.7.0"
+    "typescript": "^2.9.2"
   }
 }

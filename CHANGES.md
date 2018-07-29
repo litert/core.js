@@ -1,5 +1,21 @@
 # Changes Logs
 
+## v0.7.0
+
+- Introduce new error definitions system.
+- Updated method `Async.sleep`, now it accepts only one extra parameter.
+- Added method `Async.multiTasks`.
+- Added method `Async.nextTick`.
+- Improved class `TimeoutPromise`, now the result can be handled even timeout,
+  and the timer could be start manually.
+- Deprecated:
+
+  - class `Exception`
+  - Type `MethodDecorator`
+  - Type `ClassDecorator`
+  - Type `Optional`
+  - Type `Dict`
+
 ## v0.6.0
 
 - Added new utility class `TimeoutPromise`.

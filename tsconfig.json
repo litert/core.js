@@ -19,8 +19,8 @@
     // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "sources",
-    "outDir": "dist",
+    "rootDir": "src",
+    "outDir": "lib",
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -61,7 +61,7 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "sources/*.ts",
-    "sources/**/*.ts"
+    "src/*.ts",
+    "src/**/*.ts"
   ]
 }
