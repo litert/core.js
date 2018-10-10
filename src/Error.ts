@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -88,43 +88,53 @@ export interface IError {
     toJSON(withStack: true): IErrorData;
 }
 
-export interface IBaseError {
+interface IBaseError {
 
     new (
         code: number,
         name: string,
         message: string
     ): IError;
+
+    name: string;
+
+    message: string;
+
+    code: number;
 }
 
 export interface IErrorConstructor {
 
     new (
-        code?: number,
-        name?: string,
         message?: string
     ): IError;
+
+    name: string;
+
+    message: string;
+
+    code: number;
 }
 
-export const BaseError: IBaseError = (function(): any {
+const BaseError: IBaseError = (function(): any {
 
     let THE_CONSTRUCTOR: string = `
 let stackArray = [];
 Object.defineProperties(this, {
-    name: {
-        writable: false,
-        configurable: false,
-        value: name
+    "name": {
+        "writable": false,
+        "configurable": false,
+        "value": name
     },
-    code: {
-        writable: false,
-        configurable: false,
-        value: code
+    "code": {
+        "writable": false,
+        "configurable": false,
+        "value": code
     },
-    message: {
-        writable: false,
-        configurable: false,
-        value: message
+    "message": {
+        "writable": false,
+        "configurable": false,
+        "value": message
     }
 });
 `;
@@ -183,8 +193,8 @@ export interface IErrorHub {
     /**
      * Define a new error type.
      *
-     * @param code      The numeric-identity for the new error type.
-     * @param name      The string-identity for the new error type.
+     * @param code      The unique numeric-identity for the new error type.
+     * @param name      The unique string-identity for the new error type.
      * @param message   The description for the new error type.
      */
     define(code: number, name: string, message: string): IErrorConstructor;
@@ -200,21 +210,21 @@ export interface IErrorHub {
      * Check if an error belongs to an error type defined in this hub.
      *
      * @param e     The error to be checked.
-     * @param name  The name of error type to be checked.
+     * @param id    The name or code of error type to be checked.
      */
-    is(e: IError, name?: string): boolean;
+    is(e: IError, id?: string): boolean;
 }
 
 class ErrorHub
 implements IErrorHub {
 
-    private _classes: Record<string, IErrorConstructor>;
+    private _errors: Record<string, IErrorConstructor>;
 
     private _baseError: IBaseError;
 
     public constructor() {
 
-        this._classes = {};
+        this._errors = {};
 
         this._baseError = (Function(
             "BaseError", `class __ extends BaseError {
@@ -230,11 +240,11 @@ return __;`
         ))(BaseError) as any;
     }
 
-    public is(e: IError, name?: string): boolean {
+    public is(e: IError, id?: string | number): boolean {
 
-        if (name) {
+        if (id) {
 
-            return e instanceof this._classes[name];
+            return (!!this._errors[id]) && (e instanceof this._errors[id]);
         }
         else {
 
@@ -246,28 +256,76 @@ return __;`
 
         if (!/^[a-z]\w+$/i.test(name)) {
 
-            throw new TypeError(
+            throw new BaseError(
+                1,
+                "INVALID_ERROR_NAME",
                 `Invalid name "${name}" for error definition.`
             );
         }
 
-        return this._classes[name] = (Function(
+        if (!Number.isSafeInteger(code)) {
+
+            throw new BaseError(
+                2,
+                "INVALID_ERROR_CODE",
+                `Invalid code ${JSON.stringify(code)} for error definition.`
+            );
+        }
+
+        if (this._errors[name]) {
+
+            throw new BaseError(
+                3,
+                "DUPLICATED_ERROR_NAME",
+                `The name ${JSON.stringify(name)} of new error is duplicated.`
+            );
+        }
+
+        if (this._errors[code]) {
+
+            throw new BaseError(
+                4,
+                "DUPLICATED_ERROR_CODE",
+                `The code ${JSON.stringify(code)} of new error is duplicated.`
+            );
+        }
+
+        return this._errors[code] = this._errors[name] = (Function(
             "BaseError", `class ${name} extends BaseError {
-    constructor(code, name, message) {
+    constructor(message) {
         super(
-            code || ${code},
-            name || "${name}",
-            message || "${message}"
+            ${code},
+            ${JSON.stringify(name)},
+            message || ${JSON.stringify(message)}
         );
     };
 }
+
+Object.defineProperties(${name}, {
+    "name": {
+        "writable": false,
+        "configurable": false,
+        "value": "${name}"
+    },
+    "code": {
+        "writable": false,
+        "configurable": false,
+        "value": ${code}
+    },
+    "code": {
+        "writable": false,
+        "configurable": false,
+        "value": ${JSON.stringify(message)}
+    }
+});
+
 return ${name};`
         ))(this._baseError) as any;
     }
 
     public get(name: string): IErrorConstructor {
 
-        return this._classes[name];
+        return this._errors[name];
     }
 }
 
@@ -281,4 +339,9 @@ const DEFAULT_HUB = createErrorHub();
 export function getDefaultErrorHub(): IErrorHub {
 
     return DEFAULT_HUB;
+}
+
+export function isError(e: any): e is IError {
+
+    return e instanceof BaseError;
 }
