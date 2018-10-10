@@ -149,7 +149,7 @@ export class TimeoutPromise<T = any, E = Error> {
                  */
                 this._timer = null;
 
-            }, this._msTimeout);
+            }, this._msTimeout) as any;
         }
     }
 }

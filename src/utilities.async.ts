@@ -43,6 +43,8 @@ export function sleep(
     return new Promise<any[]>((resolve) => setTimeout(resolve, ms, arg));
 }
 
+declare function setImmediate(cb: any): void;
+
 /**
  * Call the function after 0ms.
  */

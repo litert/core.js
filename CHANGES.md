@@ -1,5 +1,10 @@
 # Changes Logs
 
+## v0.7.1
+
+- Upgrade to TypeScript v3.1.2.
+- Improved the error handling mechanism.
+
 ## v0.7.0
 
 - Introduce new error definitions system.
