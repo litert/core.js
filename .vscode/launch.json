@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Core.js] Sample 01 - Errors",
+            "program": "${workspaceFolder}/src/samples/01-errors.ts",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Core.js] Sample 02 - Async.sleep",
+            "program": "${workspaceFolder}/src/samples/02-async.sleep.ts",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Core.js] Sample 03 - Async.multiTasks",
+            "program": "${workspaceFolder}/src/samples/03-async.multiTasks.ts",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Core.js] Sample 04 - class.TimeoutPromise",
+            "program": "${workspaceFolder}/src/samples/04-class.TimeoutPromise.ts",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
+        }
+    ]
+}

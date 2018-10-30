@@ -32,15 +32,15 @@ export type IWaitResult<T, E> = {
  *
  * NOTE: This method SHOULD never fail because timer wouldn't be cancelled.
  *
- * @param ms Milliseconds to wait
- * @param arg The result of promise resolved.
+ * @param ms    Milliseconds to wait
+ * @param args  The result of promise resolved.
  */
 export function sleep(
     ms: number,
-    arg?: any
+    ...args: any[]
 ): Promise<any[]> {
 
-    return new Promise<any[]>((resolve) => setTimeout(resolve, ms, arg));
+    return new Promise<any[]>((resolve) => setTimeout(resolve, ms, args));
 }
 
 declare function setImmediate(cb: any): void;
@@ -67,30 +67,32 @@ export function multiTasks<T, E>(
 
     return new Promise<any>(function(resolve): void {
 
-        let ret: Array<IWaitResult<T, E>> = [];
+        let ret: Array<IWaitResult<T, E>> = Array(tasks.length);
 
-        for (let p of tasks) {
+        let done: number = 0;
 
-            p.then(function(r): void {
+        for (let i = 0; i < tasks.length; i++) {
 
-                ret.push({
+            tasks[i].then(function(r): void {
+
+                ret[i] = {
                     success: true,
                     result: r
-                });
+                };
 
-                if (ret.length === tasks.length) {
+                if (++done === tasks.length) {
 
                     setTimeout(resolve, 0, ret);
                 }
 
             }).catch(function(e): void {
 
-                ret.push({
+                ret[i] = {
                     success: false,
                     result: e
-                });
+                };
 
-                if (ret.length === tasks.length) {
+                if (++done === tasks.length) {
 
                     setTimeout(resolve, 0, ret);
                 }

@@ -1,5 +1,10 @@
 # Changes Logs
 
+## v1.0.0
+
+- The first feature stable version.
+- Added full documents in Simplified Chinese.
+
 ## v0.7.1
 
 - Upgrade to TypeScript v3.1.2.

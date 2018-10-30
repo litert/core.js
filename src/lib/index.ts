@@ -15,51 +15,9 @@
  */
 
 /**
- * The template type of dictionary.
- *
- * @deprecated Duplicated, use `Record` instead. This will be removed in v1.0.0.
- */
-export interface Dict<T> {
-
-    [key: string]: T;
-}
-
-/**
- * The template type of dictionary.
- *
- * @deprecated Use `Dict` instead. This will be removed in v1.0.0.
- */
-export type IDictionary<T> = Dict<T>;
-
-/**
  * Semantically stressing an nullable type.
  */
 export type Nullable<T> = T | null;
-
-/**
- * Semantically stressing an optional type.
- *
- * @deprecated Useless. This will be removed in v1.0.0.
- */
-export type Optional<T> = T | undefined;
-
-/**
- * The signature of decorator for classes.
- *
- * @deprecated Duplicated. This will be removed in v1.0.0.
- */
-export type ClassDecorator = (target: Function) => void;
-
-/**
- * The signature of decorator for methods.
- *
- * @deprecated Duplicated. This will be removed in v1.0.0.
- */
-export type MethodDecorator = (
-    target: Object, property: string | symbol
-) => void;
-
-export * from "./class.Exception";
 
 export * from "./class.RawPromise";
 

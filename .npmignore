@@ -6,3 +6,4 @@
 /.npmignore
 /tsconfig.json
 /tslint.json
+/docs/

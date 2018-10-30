@@ -36,14 +36,15 @@ export function isDomain(domain: string): boolean {
 /**
  * Validate if the input string is an E-Mail address.
  *
- * Not exactly matches the RFC, but for most usage.
+ * Not exactly matches the RFC, but fits most general usage.
  *
  * @param email The string to be validated.
  */
 export function isEMailAddress(email: string): boolean {
 
-    return email.length < EMAIL_MAX_LENGTH &&
-           EMAIL_REGEXP.test(email) &&
+    return email.length > 0 &&
+           email.length < EMAIL_MAX_LENGTH &&
            email.indexOf("..") === -1 &&
-           email.indexOf(".@") === -1;
+           email.indexOf(".@") === -1 &&
+           EMAIL_REGEXP.test(email);
 }

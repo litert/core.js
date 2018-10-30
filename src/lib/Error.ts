@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+export type DefaultMetadataType = Record<string, any>;
+
 /**
  * Describe the basic information of an error.
  */
-export interface IErrorPayload {
+export interface IErrorData<M extends {}> {
 
     /**
      * The numeric-code of an error, used to identify the type or the reason
@@ -36,9 +38,17 @@ export interface IErrorPayload {
      * error.
      */
     message: string;
+
+    /**
+     * The metadata of error.
+     */
+    metadata: M;
 }
 
-export interface IErrorData extends IErrorPayload {
+/**
+ * Describe the full information of an error.
+ */
+export interface IErrorFullData<M extends {}> extends IErrorData<M> {
 
     /**
      * The calling-stack of the position where the error occurred.
@@ -46,7 +56,10 @@ export interface IErrorData extends IErrorPayload {
     stack: string[];
 }
 
-export interface IError {
+/**
+ * The LiteRT standard error objects.
+ */
+export interface IError<M extends {} = DefaultMetadataType> {
 
     /**
      * The numeric-code of an error, used to identify the type or the reason
@@ -72,6 +85,11 @@ export interface IError {
     readonly stack: string;
 
     /**
+     * The metadata of error.
+     */
+    readonly metadata: M;
+
+    /**
      * Get the calling-stack as a string array.
      */
     getStackAsArray(): string[];
@@ -84,8 +102,9 @@ export interface IError {
     /**
      * Convert to a raw data object that could be stringified as JSON.
      */
-    toJSON(withStack?: false): IErrorPayload;
-    toJSON(withStack: true): IErrorData;
+    toJSON(withStack?: false): IErrorData<M>;
+
+    toJSON(withStack: true): IErrorFullData<M>;
 }
 
 interface IBaseError {
@@ -93,8 +112,9 @@ interface IBaseError {
     new (
         code: number,
         name: string,
-        message: string
-    ): IError;
+        message: string,
+        metadata?: DefaultMetadataType
+    ): IError<DefaultMetadataType>;
 
     name: string;
 
@@ -103,17 +123,33 @@ interface IBaseError {
     code: number;
 }
 
-export interface IErrorConstructor {
+/**
+ * The constructor of error objects.
+ */
+export interface IErrorConstructor<M extends {}> {
 
-    new (
-        message?: string
-    ): IError;
+    /**
+     * The constructor of the objects of the error.
+     */
+    new (opts?: {
+        message?: string;
+        metadata?: M;
+    }): IError<M>;
 
-    name: string;
+    /**
+     * The name of the error.
+     */
+    readonly name: string;
 
-    message: string;
+    /**
+     * The default description of the error.
+     */
+    readonly message: string;
 
-    code: number;
+    /**
+     * The code of the error.
+     */
+    readonly code: number;
 }
 
 const BaseError: IBaseError = (function(): any {
@@ -135,6 +171,11 @@ Object.defineProperties(this, {
         "writable": false,
         "configurable": false,
         "value": message
+    },
+    "metadata": {
+        "writable": false,
+        "configurable": false,
+        "value": metadata || {}
     }
 });
 `;
@@ -153,32 +194,34 @@ Object.defineProperties(this, {
     }
 
     let ret = Function(
-        "code", "name", "message", THE_CONSTRUCTOR
+        "code", "name", "message", "metadata", THE_CONSTRUCTOR
     );
 
-    ret.prototype.getStackAsArray = function(this: IError): string[] {
+    ret.prototype.getStackAsArray = function(this: IError<DefaultMetadataType>): string[] {
 
         return this.stack.split(/\n\s+at /).slice(1);
     };
 
     ret.prototype.toJSON = function(
-        this: IError,
+        this: IError<DefaultMetadataType>,
         withStack?: boolean
-    ): IErrorData | IErrorPayload {
+    ): IErrorFullData<DefaultMetadataType> | IErrorData<DefaultMetadataType> {
 
         return withStack ? {
-            "name": this.name,
             "code": this.code,
+            "name": this.name,
             "message": this.message,
+            "metadata": this.metadata,
             "stack": this.getStackAsArray()
         } : {
-            "name": this.name,
             "code": this.code,
-            "message": this.message
+            "name": this.name,
+            "message": this.message,
+            "metadata": this.metadata
         };
     };
 
-    ret.prototype.toString = function(this: IError): string {
+    ret.prototype.toString = function(this: IError<DefaultMetadataType>): string {
 
         return `Error ${this.code} (${this.name}): ${this.message}
   Call Stack:
@@ -188,23 +231,34 @@ Object.defineProperties(this, {
     return ret;
 })();
 
-export interface IErrorHub {
+/**
+ * A hub of errors, is a collection and factory of error types.
+ *
+ * Every hub has a standalone namespace of error types.
+ */
+export interface IErrorHub<M extends {}> {
 
     /**
      * Define a new error type.
      *
-     * @param code      The unique numeric-identity for the new error type.
-     * @param name      The unique string-identity for the new error type.
-     * @param message   The description for the new error type.
+     * @param code          The unique numeric-identity for the new error type.
+     * @param name          The unique string-identity for the new error type.
+     * @param message       The description for the new error type.
      */
-    define(code: number, name: string, message: string): IErrorConstructor;
+    define<M2 extends M = M>(
+        code: number,
+        name: string,
+        message: string
+    ): IErrorConstructor<M2>;
 
     /**
      * Get the error constructor by its name .
      *
      * @param name  The string-identity for the error type.
      */
-    get(name: string): IErrorConstructor;
+    get<M2 extends M = M>(
+        name: string
+    ): IErrorConstructor<M2>;
 
     /**
      * Check if an error belongs to an error type defined in this hub.
@@ -212,13 +266,21 @@ export interface IErrorHub {
      * @param e     The error to be checked.
      * @param id    The name or code of error type to be checked.
      */
-    is(e: IError, id?: string): boolean;
+    is<M2 extends M = M>(e: any, id?: string | number): e is IError<M2>;
+
+    /**
+     * Check if an error belongs to an error type defined in this hub.
+     *
+     * @param e     The error to be checked.
+     * @param id    The name or code of error type to be checked.
+     */
+    is(e: any, id?: string | number): e is IError<M>;
 }
 
-class ErrorHub
-implements IErrorHub {
+class ErrorHub<M extends {}>
+implements IErrorHub<M> {
 
-    private _errors: Record<string, IErrorConstructor>;
+    private _errors: Record<string, IErrorConstructor<any>>;
 
     private _baseError: IBaseError;
 
@@ -228,11 +290,12 @@ implements IErrorHub {
 
         this._baseError = (Function(
             "BaseError", `class __ extends BaseError {
-    constructor(code, name, message) {
+    constructor(code, name, message, metadata) {
         super(
             code,
             name,
-            message
+            message,
+            metadata
         );
     };
 }
@@ -240,9 +303,9 @@ return __;`
         ))(BaseError) as any;
     }
 
-    public is(e: IError, id?: string | number): boolean {
+    public is(e: any, id?: string | number): e is IError<M> {
 
-        if (id) {
+        if (typeof id !== "undefined") {
 
             return (!!this._errors[id]) && (e instanceof this._errors[id]);
         }
@@ -252,7 +315,11 @@ return __;`
         }
     }
 
-    public define(code: number, name: string, message: string): IErrorConstructor {
+    public define<M2 extends M>(
+        code: number,
+        name: string,
+        message: string
+    ): IErrorConstructor<M2> {
 
         if (!/^[a-z]\w+$/i.test(name)) {
 
@@ -292,11 +359,12 @@ return __;`
 
         return this._errors[code] = this._errors[name] = (Function(
             "BaseError", `class ${name} extends BaseError {
-    constructor(message) {
+    constructor(opts = {}) {
         super(
             ${code},
             ${JSON.stringify(name)},
-            message || ${JSON.stringify(message)}
+            opts.message || ${JSON.stringify(message)},
+            opts.metadata
         );
     };
 }
@@ -312,7 +380,7 @@ Object.defineProperties(${name}, {
         "configurable": false,
         "value": ${code}
     },
-    "code": {
+    "message": {
         "writable": false,
         "configurable": false,
         "value": ${JSON.stringify(message)}
@@ -323,25 +391,40 @@ return ${name};`
         ))(this._baseError) as any;
     }
 
-    public get(name: string): IErrorConstructor {
+    public get<M2 extends M>(
+        name: string
+    ): IErrorConstructor<M2> {
 
         return this._errors[name];
     }
 }
 
-export function createErrorHub(): IErrorHub {
+/**
+ * Create a new error hub that has a standalone namespace of error types.
+ */
+export function createErrorHub<M extends {}>(): IErrorHub<M> {
 
-    return new ErrorHub();
+    return new ErrorHub<M>();
 }
 
-const DEFAULT_HUB = createErrorHub();
+const DEFAULT_HUB = createErrorHub<DefaultMetadataType>();
 
-export function getDefaultErrorHub(): IErrorHub {
+/**
+ * Get the default hub of errors.
+ */
+export function getDefaultErrorHub(): IErrorHub<DefaultMetadataType> {
 
     return DEFAULT_HUB;
 }
 
-export function isError(e: any): e is IError {
+/**
+ * Check if an object is a LiteRT error object.
+ *
+ * @param e The error object to be identified.
+ */
+export function isError<
+    M extends {} = DefaultMetadataType
+>(e: any): e is IError<M> {
 
     return e instanceof BaseError;
 }

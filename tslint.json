@@ -18,7 +18,8 @@
         "one-line": [false],
         "object-literal-key-quotes": [false],
         "ban-types": false,
-        "only-arrow-functions": false
+        "only-arrow-functions": false,
+        "no-unused-expression": false
     },
     "rulesDirectory": []
 }

@@ -37,26 +37,36 @@ export class RawPromise<T = void, E = Error> {
      *
      * If this method is called, promise will be REJECTED.
      */
-    public reject!: IPromiseRejector<E>;
+    public reject(e: E): void {
+
+        return this._reject(e);
+    }
 
     /**
      * The Promise resolver method.
      *
      * If this method is called, promise will be RESOLVED.
      */
-    public resolve!: IPromiseResolver<T>;
+    public resolve(data?: T): void {
+
+        return this._resolve(data);
+    }
 
     /**
      * The Promise object.
      */
     public promise: Promise<T>;
 
+    protected _resolve!: IPromiseResolver<T>;
+
+    protected _reject!: IPromiseRejector<E>;
+
     public constructor() {
 
         this.promise = new Promise<T>((resolve, reject): void => {
 
-            this.resolve = resolve;
-            this.reject = reject;
+            this._resolve = resolve;
+            this._reject = reject;
         });
     }
 }
