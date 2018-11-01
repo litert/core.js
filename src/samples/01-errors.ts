@@ -59,3 +59,16 @@ if (Core.isError(new MY_TEST_ERROR2())) {
 
     console.log(MY_TEST_ERROR2.message);
 }
+
+try {
+
+    myErrors.define<IMyErrorMetadata>(
+        2,
+        "MY_TEST_ERROR2",
+        "Custom error 2"
+    );
+}
+catch (e) {
+
+    console.error(e.toString());
+}

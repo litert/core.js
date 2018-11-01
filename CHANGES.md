@@ -1,5 +1,10 @@
 # Changes Logs
 
+## v1.0.1
+
+- Allowed automatically generating code for defining new errors.
+- Now `IErrorHub.define` throws errors defined in the default error hub.
+
 ## v1.0.0
 
 - The first feature stable version.

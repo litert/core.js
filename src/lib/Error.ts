@@ -242,11 +242,12 @@ export interface IErrorHub<M extends {}> {
      * Define a new error type.
      *
      * @param code          The unique numeric-identity for the new error type.
+     *                      The code is generated automatically if set to null.
      * @param name          The unique string-identity for the new error type.
      * @param message       The description for the new error type.
      */
     define<M2 extends M = M>(
-        code: number,
+        code: number | null,
         name: string,
         message: string
     ): IErrorConstructor<M2>;
@@ -277,6 +278,8 @@ export interface IErrorHub<M extends {}> {
     is(e: any, id?: string | number): e is IError<M>;
 }
 
+let DEFAULT_HUB: IErrorHub<Record<string, any>>;
+
 class ErrorHub<M extends {}>
 implements IErrorHub<M> {
 
@@ -284,7 +287,11 @@ implements IErrorHub<M> {
 
     private _baseError: IBaseError;
 
+    private _counter: number;
+
     public constructor() {
+
+        this._counter = 0;
 
         this._errors = {};
 
@@ -316,45 +323,53 @@ return __;`
     }
 
     public define<M2 extends M>(
-        code: number,
+        code: number | null,
         name: string,
         message: string
     ): IErrorConstructor<M2> {
 
         if (!/^[a-z]\w+$/i.test(name)) {
 
-            throw new BaseError(
-                1,
-                "INVALID_ERROR_NAME",
-                `Invalid name "${name}" for error definition.`
-            );
+            const TheError = DEFAULT_HUB.get("INVALID_ERROR_NAME");
+
+            throw new TheError({
+                message: `Invalid name ${JSON.stringify(name)} for error definition.`
+            });
         }
 
-        if (!Number.isSafeInteger(code)) {
+        if (code === null) {
 
-            throw new BaseError(
-                2,
-                "INVALID_ERROR_CODE",
-                `Invalid code ${JSON.stringify(code)} for error definition.`
-            );
+            code = this._counter++;
+        }
+        else if (!Number.isSafeInteger(code)) {
+
+            const TheError = DEFAULT_HUB.get("INVALID_ERROR_CODE");
+
+            throw new TheError({
+                message: `Invalid code ${JSON.stringify(code)} for error definition.`
+            });
+        }
+        else {
+
+            this._counter = code;
         }
 
         if (this._errors[name]) {
 
-            throw new BaseError(
-                3,
-                "DUPLICATED_ERROR_NAME",
-                `The name ${JSON.stringify(name)} of new error is duplicated.`
-            );
+            const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_NAME");
+
+            throw new TheError({
+                message: `The name ${JSON.stringify(name)} of new error already exists.`
+            });
         }
 
         if (this._errors[code]) {
 
-            throw new BaseError(
-                4,
-                "DUPLICATED_ERROR_CODE",
-                `The code ${JSON.stringify(code)} of new error is duplicated.`
-            );
+            const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
+
+            throw new TheError({
+                message: `The code ${JSON.stringify(code)} of new error already exists.`
+            });
         }
 
         return this._errors[code] = this._errors[name] = (Function(
@@ -407,7 +422,31 @@ export function createErrorHub<M extends {}>(): IErrorHub<M> {
     return new ErrorHub<M>();
 }
 
-const DEFAULT_HUB = createErrorHub<DefaultMetadataType>();
+DEFAULT_HUB = createErrorHub<DefaultMetadataType>();
+
+DEFAULT_HUB.define(
+    null,
+    "INVALID_ERROR_NAME",
+    `Invalid name for error definition.`
+);
+
+DEFAULT_HUB.define(
+    null,
+    "INVALID_ERROR_CODE",
+    `Invalid code for error definition.`
+);
+
+DEFAULT_HUB.define(
+    null,
+    "DUPLICATED_ERROR_NAME",
+    `The name of new error already exists.`
+);
+
+DEFAULT_HUB.define(
+    null,
+    "DUPLICATED_ERROR_CODE",
+    `The code of new error already exists.`
+);
 
 /**
  * Get the default hub of errors.

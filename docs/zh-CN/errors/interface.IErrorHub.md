@@ -11,11 +11,12 @@ interface IErrorHub<M extends {}> {
      * 定义一种新的异常类型。
      *
      * @param code          新异常类型的唯一数字错误号。
+     *                      设置为 null 则自动生成递增错误号。
      * @param name          新异常类型的唯一名称。
      * @param message       新异常类型的说明文字。
      */
     define<M2 extends M = M>(
-        code: number,
+        code: number | null,
         name: string,
         message: string
     ): IErrorConstructor<M2>;
