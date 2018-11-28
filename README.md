@@ -13,6 +13,15 @@ The core of LiteRT.
 npm install @litert/core --save
 ```
 
+## Requirements
+
+- Node.js v8.x (Or newer)
+- TypeScript v3.1.x (Or newer)
+
+## Documents
+
+- [简体中文版](./docs/zh-CN/README.md)
+
 ## License
 
 This library is published under [Apache-2.0](./LICENSE) license.
