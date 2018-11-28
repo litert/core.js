@@ -18,17 +18,10 @@
 
 import * as Core from "../lib";
 
-(async () => {
+Core.Async.nextTick(function(a: string): void {
 
-    console.log(new Date().toISOString());
+    console.log(a);
 
-    const result = await Core.Async.sleep(1000, "cc", 123, true);
+}, "world");
 
-    console.log(new Date().toISOString());
-
-    for (let i = 0; i < result.length; i++) {
-
-        console.info(`result[${i}] = ${JSON.stringify(result[i])}`);
-    }
-
-})();
+console.log("hello");

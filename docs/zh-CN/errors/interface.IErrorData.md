@@ -26,6 +26,11 @@ interface IErrorData<M extends {}> {
      * 异常的元数据信息。
      */
     metadata: M;
+
+    /**
+     * 定义该异常的模块名称（而不一定是抛出异常的模块名称）。
+     */
+    module: string;
 }
 ```
 

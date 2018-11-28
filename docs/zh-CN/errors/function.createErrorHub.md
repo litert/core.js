@@ -5,7 +5,11 @@
 ## 声明
 
 ```ts
-declare function createErrorHub<M extends {}>(): IErrorHub<M>;
+declare const DEFAULT_ERROR_HUB_MODULE = "unknown";
+
+declare function createErrorHub<M extends {}>(
+    moduleName: string = DEFAULT_ERROR_HUB_MODULE
+): IErrorHub<M>;
 ```
 
 ## 位置

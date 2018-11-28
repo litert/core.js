@@ -29,6 +29,11 @@ interface IErrorConstructor<M extends {}> {
      * 异常的错误号。
      */
     readonly code: number;
+
+    /**
+     * 定义该异常的模块名称（而不一定是抛出异常的模块名称）。
+     */
+    readonly module: string;
 }
 ```
 

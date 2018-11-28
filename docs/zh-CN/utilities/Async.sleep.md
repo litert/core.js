@@ -7,10 +7,10 @@
 ## 声明
 
 ```ts
-declare function sleep(
+declare function sleep<T extends any[]>(
     ms: number,
-    ...args: any[]
-): Promise<any[]>;
+    ...args: T
+): Promise<T>;
 ```
 
 ## 位置
@@ -27,11 +27,19 @@ import * as Core from "@litert/core";
 
 (async () => {
 
-    console.log(new Date());
+    console.log(new Date().toISOString());
 
-    await Core.Async.sleep(1000);
+    /**
+     * result 的类型是 [string, number, boolean]
+     */
+    const result = await Core.Async.sleep(1000, "cc", 123, true);
 
-    console.log(new Date());
+    console.log(new Date().toISOString());
+
+    for (let i = 0; i < result.length; i++) {
+
+        console.info(`result[${i}] = ${JSON.stringify(result[i])}`);
+    }
 
 })();
 ```

@@ -1,5 +1,11 @@
 # Changes Logs
 
+## v1.0.2
+
+- Added `module` field for error objects and constructors, hubs.
+- Improved the `Async.nextTick` and `Async.sleep` method.
+- Improved the documents.
+
 ## v1.0.1
 
 - Allowed automatically generating code for defining new errors.

@@ -43,6 +43,11 @@ export interface IErrorData<M extends {}> {
      * The metadata of error.
      */
     metadata: M;
+
+    /**
+     * The name of module thats emit this error.
+     */
+    module: string;
 }
 
 /**
@@ -90,6 +95,11 @@ export interface IError<M extends {} = DefaultMetadataType> {
     readonly metadata: M;
 
     /**
+     * The name of module thats emit this error.
+     */
+    readonly module: string;
+
+    /**
      * Get the calling-stack as a string array.
      */
     getStackAsArray(): string[];
@@ -113,7 +123,8 @@ interface IBaseError {
         code: number,
         name: string,
         message: string,
-        metadata?: DefaultMetadataType
+        metadata?: DefaultMetadataType,
+        moduleName?: string
     ): IError<DefaultMetadataType>;
 
     name: string;
@@ -150,6 +161,12 @@ export interface IErrorConstructor<M extends {}> {
      * The code of the error.
      */
     readonly code: number;
+
+    /**
+     * The name of module thats emit this error.
+     */
+    readonly module: string;
+
 }
 
 const BaseError: IBaseError = (function(): any {
@@ -176,6 +193,11 @@ Object.defineProperties(this, {
         "writable": false,
         "configurable": false,
         "value": metadata || {}
+    },
+    "module": {
+        "writable": false,
+        "configurable": false,
+        "value": moduleName
     }
 });
 `;
@@ -194,7 +216,7 @@ Object.defineProperties(this, {
     }
 
     let ret = Function(
-        "code", "name", "message", "metadata", THE_CONSTRUCTOR
+        "code", "name", "message", "metadata", "moduleName", THE_CONSTRUCTOR
     );
 
     ret.prototype.getStackAsArray = function(this: IError<DefaultMetadataType>): string[] {
@@ -209,15 +231,17 @@ Object.defineProperties(this, {
 
         return withStack ? {
             "code": this.code,
-            "name": this.name,
             "message": this.message,
             "metadata": this.metadata,
+            "module": this.module,
+            "name": this.name,
             "stack": this.getStackAsArray()
         } : {
             "code": this.code,
-            "name": this.name,
             "message": this.message,
-            "metadata": this.metadata
+            "metadata": this.metadata,
+            "module": this.module,
+            "name": this.name
         };
     };
 
@@ -237,6 +261,11 @@ Object.defineProperties(this, {
  * Every hub has a standalone namespace of error types.
  */
 export interface IErrorHub<M extends {}> {
+
+    /**
+     * The name of module thats emit this error.
+     */
+    readonly module: string;
 
     /**
      * Define a new error type.
@@ -289,25 +318,35 @@ implements IErrorHub<M> {
 
     private _counter: number;
 
-    public constructor() {
+    private _module: string;
+
+    public constructor(moduleName: string) {
 
         this._counter = 0;
 
         this._errors = {};
 
+        this._module = moduleName;
+
         this._baseError = (Function(
             "BaseError", `class __ extends BaseError {
-    constructor(code, name, message, metadata) {
+    constructor(code, name, message, metadata, moduleName) {
         super(
             code,
             name,
             message,
-            metadata
+            metadata,
+            moduleName
         );
     };
 }
 return __;`
-        ))(BaseError) as any;
+        ))(BaseError, this._module) as any;
+    }
+
+    public get module(): string {
+
+        return this._module;
     }
 
     public is(e: any, id?: string | number): e is IError<M> {
@@ -379,7 +418,8 @@ return __;`
             ${code},
             ${JSON.stringify(name)},
             opts.message || ${JSON.stringify(message)},
-            opts.metadata
+            opts.metadata,
+            ${JSON.stringify(this._module)}
         );
     };
 }
@@ -399,7 +439,12 @@ Object.defineProperties(${name}, {
         "writable": false,
         "configurable": false,
         "value": ${JSON.stringify(message)}
-    }
+    },
+    "module": {
+        "writable": false,
+        "configurable": false,
+        "value": ${JSON.stringify(this._module)}
+    },
 });
 
 return ${name};`
@@ -415,14 +460,21 @@ return ${name};`
 }
 
 /**
+ * The default name for module of errors, if omitted.
+ */
+export const DEFAULT_ERROR_HUB_MODULE = "unknown";
+
+/**
  * Create a new error hub that has a standalone namespace of error types.
  */
-export function createErrorHub<M extends {}>(): IErrorHub<M> {
+export function createErrorHub<M extends {}>(
+    moduleName: string = DEFAULT_ERROR_HUB_MODULE
+): IErrorHub<M> {
 
-    return new ErrorHub<M>();
+    return new ErrorHub<M>(moduleName);
 }
 
-DEFAULT_HUB = createErrorHub<DefaultMetadataType>();
+DEFAULT_HUB = createErrorHub<DefaultMetadataType>("@litert/core");
 
 DEFAULT_HUB.define(
     null,

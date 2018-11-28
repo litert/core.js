@@ -29,7 +29,8 @@ const EMAIL_MAX_LENGTH = 255;
  */
 export function isDomain(domain: string): boolean {
 
-    return domain.length < DOMAIN_MAX_LENGTH &&
+    return domain.length > 0 &&
+           domain.length < DOMAIN_MAX_LENGTH &&
            DOMAIN_REGEXP.test(domain);
 }
 

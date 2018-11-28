@@ -51,6 +51,42 @@
                 "${workspaceFolder}/libs/*.js",
                 "${workspaceFolder}/samples/*.js"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Core.js] Sample 05 - Async.nextTick",
+            "program": "${workspaceFolder}/src/samples/05-async.nextTick.ts",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Core.js] Sample 06 - Validators.isDomain",
+            "program": "${workspaceFolder}/src/samples/06-validators.isDomain.ts",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Core.js] Sample 07 - Validators.isEMailAddress",
+            "program": "${workspaceFolder}/src/samples/07-validators.isEMailAddress.ts",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
         }
     ]
 }

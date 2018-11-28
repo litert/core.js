@@ -17,8 +17,12 @@
 
 ## 工具方法
 
+- [Async.multiTasks](./utilities/Async.multiTasks.md)
+- [Async.nextTick](./utilities/Async.nextTick.md)
 - [Async.sleep](./utilities/Async.sleep.md)
 - [IPromiseResolver](./abstract-types/IPromiseResolver.md)
+- [Validators.isDomain](./utilities/Validators.isDomain.md)
+- [Validators.isEMailAddress](./utilities/Validators.isEMailAddress.md)
 
 ## 异常处理
 

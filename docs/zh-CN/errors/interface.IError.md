@@ -33,6 +33,11 @@ interface IError<M extends {} = DefaultMetadataType> {
     readonly metadata: M;
 
     /**
+     * 定义该异常的模块名称（而不一定是抛出异常的模块名称）。
+     */
+    readonly module: string;
+
+    /**
      * 获取异常所在的调用栈信息数组。
      */
     getStackAsArray(): string[];

@@ -8,6 +8,11 @@
 interface IErrorHub<M extends {}> {
 
     /**
+     * 该异常管理器所属的模块名称。
+     */
+    readonly module: string;
+
+    /**
      * 定义一种新的异常类型。
      *
      * @param code          新异常类型的唯一数字错误号。

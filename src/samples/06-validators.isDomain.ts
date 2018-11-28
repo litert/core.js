@@ -18,17 +18,35 @@
 
 import * as Core from "../lib";
 
-(async () => {
+const TESTS: string[] = [
+    "",
+    "localhost",
+    "127.0.0.1",
+    "a.com",
+    ".",
+    "com.",
+    ".com",
+    "-",
+    "_",
+    "g_",
+    "g-",
+    "c+",
+    "c!",
+    "a.b.c.d",
+    "www.google.com",
+    ".google.com"
+];
 
-    console.log(new Date().toISOString());
+const MAX_LENGTH = Math.max(...TESTS.map((x) => x.length)) + 4;
 
-    const result = await Core.Async.sleep(1000, "cc", 123, true);
+for (const item of TESTS) {
 
-    console.log(new Date().toISOString());
+    if (Core.Validators.isDomain(item)) {
 
-    for (let i = 0; i < result.length; i++) {
-
-        console.info(`result[${i}] = ${JSON.stringify(result[i])}`);
+        console.info(`${item.padEnd(MAX_LENGTH, " ")} -> Yes`);
     }
+    else {
 
-})();
+        console.error(`${item.padEnd(MAX_LENGTH, " ")} -> No`);
+    }
+}

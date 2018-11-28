@@ -35,22 +35,22 @@ export type IWaitResult<T, E> = {
  * @param ms    Milliseconds to wait
  * @param args  The result of promise resolved.
  */
-export function sleep(
+export function sleep<T extends any[]>(
     ms: number,
-    ...args: any[]
-): Promise<any[]> {
+    ...args: T
+): Promise<T> {
 
-    return new Promise<any[]>((resolve) => setTimeout(resolve, ms, args));
+    return new Promise<T>((resolve) => setTimeout(resolve, ms, args));
 }
 
 declare function setImmediate(cb: any): void;
 
 /**
- * Call the function after 0ms.
+ * Call the function after 0ms, which means in next tick.
  */
-export const nextTick: (
-    fn: Function,
-    ...args: any[]
+export const nextTick: <T extends any[]>(
+    fn: (...args: T) => void,
+    ...args: T
 ) => void = typeof setImmediate === "function" ?
     setImmediate : function(fn: Function, ...args: any[]): void {
         setTimeout(fn, 0, ...args);

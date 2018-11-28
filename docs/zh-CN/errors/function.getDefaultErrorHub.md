@@ -5,6 +5,9 @@
 ## 声明
 
 ```ts
+/**
+ * 获取默认异常类型定义管理器。（module = "@litert/core"）
+ */
 declare function getDefaultErrorHub(): IErrorHub<DefaultMetadataType>;
 ```
 

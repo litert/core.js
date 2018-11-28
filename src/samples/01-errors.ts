@@ -72,3 +72,11 @@ catch (e) {
 
     console.error(e.toString());
 }
+
+console.log(`Hub[default] Module:               ${errors.module}`);
+
+console.log(`Hub[myErrors] Module:              ${myErrors.module}`);
+
+console.log(`Error[MY_TEST_ERROR2] Module:      ${MY_TEST_ERROR2.module}`);
+
+console.log(`Error[INVALID_ERROR_NAME] Module:  ${errors.get("INVALID_ERROR_NAME").module}`);
