@@ -87,6 +87,18 @@
                 "${workspaceFolder}/libs/*.js",
                 "${workspaceFolder}/samples/*.js"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "[LiteRT/Core.js] Sample 08 - class.RawPromise",
+            "program": "${workspaceFolder}/src/samples/08-class.RawPromise.ts",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
         }
     ]
 }

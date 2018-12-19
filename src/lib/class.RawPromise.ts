@@ -33,40 +33,30 @@ export type IPromiseResolver<T> = (val?: T) => void;
 export class RawPromise<T = void, E = Error> {
 
     /**
+     * The Promise object.
+     */
+    public promise: Promise<T>;
+
+    /**
      * The Promise rejector method.
      *
      * If this method is called, promise will be REJECTED.
      */
-    public reject(e: E): void {
-
-        return this._reject(e);
-    }
+    public resolve!: IPromiseResolver<T>;
 
     /**
      * The Promise resolver method.
      *
      * If this method is called, promise will be RESOLVED.
      */
-    public resolve(data?: T): void {
-
-        return this._resolve(data);
-    }
-
-    /**
-     * The Promise object.
-     */
-    public promise: Promise<T>;
-
-    protected _resolve!: IPromiseResolver<T>;
-
-    protected _reject!: IPromiseRejector<E>;
+    public reject!: IPromiseRejector<E>;
 
     public constructor() {
 
         this.promise = new Promise<T>((resolve, reject): void => {
 
-            this._resolve = resolve;
-            this._reject = reject;
+            this.resolve = resolve;
+            this.reject = reject;
         });
     }
 }

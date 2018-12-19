@@ -1,5 +1,10 @@
 # Changes Logs
 
+## v1.0.3
+
+- Fixed: Methods `reject` and `resolve` in RawPromise couldn't work without
+  `this` binding.
+
 ## v1.0.2
 
 - Added `module` field for error objects and constructors, hubs.

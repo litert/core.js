@@ -20,34 +20,13 @@ import * as Core from "../lib";
 
 (async () => {
 
-    let ret = new Core.TimeoutPromise<string, Error>(
-        100,
-        new Error("TIMEOUT"),
-        true,
-        function(result): void {
+    let rp = new Core.RawPromise<number>();
 
-            if (result.value) {
+    /**
+     * This couldn't work in v1.0.2.
+     */
+    setTimeout(rp.resolve, 1000, 123456);
 
-                console.log(`Timeout Result:`, result.value);
-            }
-            else if (result.error) {
-
-                console.error(`Timeout Error:`, result.error);
-            }
-        }
-    );
-
-    setTimeout(ret.resolve, 300, "hello");
-
-    try {
-
-        await ret.promise;
-
-        console.log("Not timeout.");
-    }
-    catch (e) {
-
-        console.error(e);
-    }
+    console.log(await rp.promise);
 
 })();

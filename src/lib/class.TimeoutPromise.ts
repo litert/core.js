@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { RawPromise } from "./class.RawPromise";
+import { RawPromise, IPromiseRejector, IPromiseResolver } from "./class.RawPromise";
 
 export type ITimeoutResult<T, E> = {
 
@@ -42,6 +42,10 @@ extends RawPromise<T, E> {
 
     private _handleTimeout!: IPromiseTimeoutResultHandler<T, E>;
 
+    private _reject: IPromiseRejector<E>;
+
+    private _resolve: IPromiseResolver<T>;
+
     /**
      * The constructor of a timeout-promise.
      *
@@ -59,6 +63,9 @@ extends RawPromise<T, E> {
 
         super();
 
+        this._reject = this.reject;
+        this._resolve = this.resolve;
+
         this._msTimeout = msTimeout;
         this._timeoutError = timeoutError;
 
@@ -67,66 +74,57 @@ extends RawPromise<T, E> {
             this._handleTimeout = handleTimeout;
         }
 
+        this._initMethods();
+
         if (autoStart) {
 
             this.start();
         }
     }
 
-    /**
-     * The Promise rejector method.
-     *
-     * If this method is called, promise will be REJECTED.
-     *
-     * If it's already timeont, then do nothing.
-     */
-    public reject(e: E): void {
+    private _initMethods(): void {
 
-        /**
-         * If no timer, it means already timeout, so do nothing.
-         */
-        if (null === this._timer) {
+        this.reject = (e: E): void => {
 
-            this._handleTimeout && this._handleTimeout({
-                "error": e,
-                "value": undefined
-            });
+            /**
+             * If no timer, it means already timeout, so do nothing.
+             */
+            if (null === this._timer) {
 
-            return;
-        }
+                this._handleTimeout && this._handleTimeout({
+                    "error": e,
+                    "value": undefined
+                });
 
-        clearTimeout(this._timer);
-        this._timer = null;
+                return;
+            }
 
-        this._reject(e);
-    }
+            clearTimeout(this._timer);
+            this._timer = null;
 
-    /**
-     * The Promise resolver method.
-     *
-     * If this method is called, promise will be RESOLVED.
-     *
-     * If it's already timeont, then do nothing.
-     */
-    public resolve(data?: T): void {
+            this._reject(e);
+        };
 
-        /**
-         * If no timer, it means already timeout, so do nothing.
-         */
-        if (null === this._timer) {
+        this.resolve = (data?: T): void => {
 
-            this._handleTimeout && this._handleTimeout({
-                "error": null,
-                "value": data
-            });
+            /**
+             * If no timer, it means already timeout, so do nothing.
+             */
+            if (null === this._timer) {
 
-            return;
-        }
+                this._handleTimeout && this._handleTimeout({
+                    "error": null,
+                    "value": data
+                });
 
-        clearTimeout(this._timer);
-        this._timer = null;
+                return;
+            }
 
-        this._resolve(data);
+            clearTimeout(this._timer);
+            this._timer = null;
+
+            this._resolve(data);
+        };
     }
 
     /**
