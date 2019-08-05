@@ -12,7 +12,7 @@
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
-                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/lib/*.js",
                 "${workspaceFolder}/samples/*.js"
             ]
         },
@@ -24,7 +24,7 @@
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
-                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/lib/*.js",
                 "${workspaceFolder}/samples/*.js"
             ]
         },

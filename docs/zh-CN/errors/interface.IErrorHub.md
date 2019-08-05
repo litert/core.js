@@ -5,7 +5,7 @@
 ## 结构
 
 ```ts
-interface IErrorHub<M extends {}> {
+interface IErrorHub<M extends DefaultMetadataType> {
 
     /**
      * 该异常管理器所属的模块名称。
@@ -19,11 +19,13 @@ interface IErrorHub<M extends {}> {
      *                      设置为 null 则自动生成递增错误号。
      * @param name          新异常类型的唯一名称。
      * @param message       新异常类型的说明文字。
+     * @param metadata      定义默认的元数据值。
      */
     define<M2 extends M = M>(
         code: number | null,
         name: string,
-        message: string
+        message: string,
+        metadata?: M2
     ): IErrorConstructor<M2>;
 
     /**

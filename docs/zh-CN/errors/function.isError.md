@@ -6,7 +6,7 @@
 
 ```ts
 declare function isError<
-    M extends {} = DefaultMetadataType
+    M extends DefaultMetadataType = DefaultMetadataType
 >(e: any): e is IError<M>;
 ```
 

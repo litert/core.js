@@ -19,7 +19,7 @@ export type DefaultMetadataType = Record<string, any>;
 /**
  * Describe the basic information of an error.
  */
-export interface IErrorData<M extends {}> {
+export interface IErrorData<M extends DefaultMetadataType> {
 
     /**
      * The numeric-code of an error, used to identify the type or the reason
@@ -53,7 +53,7 @@ export interface IErrorData<M extends {}> {
 /**
  * Describe the full information of an error.
  */
-export interface IErrorFullData<M extends {}> extends IErrorData<M> {
+export interface IErrorFullData<M extends DefaultMetadataType> extends IErrorData<M> {
 
     /**
      * The calling-stack of the position where the error occurred.
@@ -64,7 +64,7 @@ export interface IErrorFullData<M extends {}> extends IErrorData<M> {
 /**
  * The LiteRT standard error objects.
  */
-export interface IError<M extends {} = DefaultMetadataType> {
+export interface IError<M extends DefaultMetadataType = DefaultMetadataType> {
 
     /**
      * The numeric-code of an error, used to identify the type or the reason
@@ -137,7 +137,7 @@ interface IBaseError {
 /**
  * The constructor of error objects.
  */
-export interface IErrorConstructor<M extends {}> {
+export interface IErrorConstructor<M extends DefaultMetadataType> {
 
     /**
      * The constructor of the objects of the error.
@@ -167,6 +167,10 @@ export interface IErrorConstructor<M extends {}> {
      */
     readonly module: string;
 
+    /**
+     * The default value of metadata.
+     */
+    readonly defaultMetadata: M;
 }
 
 const BaseError: IBaseError = (function(): any {
@@ -198,6 +202,11 @@ Object.defineProperties(this, {
         "writable": false,
         "configurable": false,
         "value": moduleName
+    },
+    "defaultMetadata": {
+        "writable": false,
+        "configurable": false,
+        "value": {}
     }
 });
 `;
@@ -260,7 +269,7 @@ Object.defineProperties(this, {
  *
  * Every hub has a standalone namespace of error types.
  */
-export interface IErrorHub<M extends {}> {
+export interface IErrorHub<M extends DefaultMetadataType> {
 
     /**
      * The name of module thats emit this error.
@@ -278,7 +287,8 @@ export interface IErrorHub<M extends {}> {
     define<M2 extends M = M>(
         code: number | null,
         name: string,
-        message: string
+        message: string,
+        metadata?: M2
     ): IErrorConstructor<M2>;
 
     /**
@@ -309,7 +319,7 @@ export interface IErrorHub<M extends {}> {
 
 let DEFAULT_HUB: IErrorHub<Record<string, any>>;
 
-class ErrorHub<M extends {}>
+class ErrorHub<M extends DefaultMetadataType>
 implements IErrorHub<M> {
 
     private _errors: Record<string, IErrorConstructor<any>>;
@@ -364,7 +374,8 @@ return __;`
     public define<M2 extends M>(
         code: number | null,
         name: string,
-        message: string
+        message: string,
+        metadata?: M2
     ): IErrorConstructor<M2> {
 
         if (!/^[a-z]\w+$/i.test(name)) {
@@ -412,13 +423,13 @@ return __;`
         }
 
         return this._errors[code] = this._errors[name] = (Function(
-            "BaseError", `class ${name} extends BaseError {
+            "BaseError", "metadata", `class ${name} extends BaseError {
     constructor(opts = {}) {
         super(
             ${code},
             ${JSON.stringify(name)},
             opts.message || ${JSON.stringify(message)},
-            opts.metadata,
+            { ...metadata, ...opts.metadata },
             ${JSON.stringify(this._module)}
         );
     };
@@ -445,10 +456,15 @@ Object.defineProperties(${name}, {
         "configurable": false,
         "value": ${JSON.stringify(this._module)}
     },
+    "defaultMetadata": {
+        "writable": false,
+        "configurable": false,
+        "value": metadata || {}
+    }
 });
 
 return ${name};`
-        ))(this._baseError) as any;
+        ))(this._baseError, metadata) as any;
     }
 
     public get<M2 extends M>(
@@ -467,7 +483,7 @@ export const DEFAULT_ERROR_HUB_MODULE = "unknown";
 /**
  * Create a new error hub that has a standalone namespace of error types.
  */
-export function createErrorHub<M extends {}>(
+export function createErrorHub<M extends DefaultMetadataType>(
     moduleName: string = DEFAULT_ERROR_HUB_MODULE
 ): IErrorHub<M> {
 
@@ -514,7 +530,7 @@ export function getDefaultErrorHub(): IErrorHub<DefaultMetadataType> {
  * @param e The error object to be identified.
  */
 export function isError<
-    M extends {} = DefaultMetadataType
+    M extends DefaultMetadataType = DefaultMetadataType
 >(e: any): e is IError<M> {
 
     return e instanceof BaseError;

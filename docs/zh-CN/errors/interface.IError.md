@@ -5,7 +5,7 @@
 ## 结构
 
 ```ts
-interface IError<M extends {} = DefaultMetadataType> {
+interface IError<M extends DefaultMetadataType = DefaultMetadataType> {
 
     /**
      * 异常的错误号。

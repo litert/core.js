@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v1.0.4
+
+- Added default metadata property for Error consturctor and definition.
+
 ## v1.0.3
 
 - Fixed: Methods `reject` and `resolve` in RawPromise couldn't work without

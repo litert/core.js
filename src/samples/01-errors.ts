@@ -46,18 +46,23 @@ const MY_TEST_ERROR1 = myErrors.define<IMyErrorMetadata>(
 const MY_TEST_ERROR2 = myErrors.define<IMyErrorMetadata>(
     2,
     "MY_TEST_ERROR2",
-    "Custom error 2"
+    "Custom error 2",
+    {
+        "source": "China"
+    }
 );
 
 console.error(JSON.stringify(new MY_TEST_ERROR1({
     "metadata": {
-        "source": "hello"
+        "source": "USA"
     }
 }).toJSON(true), null, 2));
 
 if (Core.isError(new MY_TEST_ERROR2())) {
 
     console.log(MY_TEST_ERROR2.message);
+    console.log(new MY_TEST_ERROR2().metadata.source);
+    console.log(new MY_TEST_ERROR2({ "metadata": { "source": "Japan" } }).metadata.source);
 }
 
 try {
@@ -80,3 +85,5 @@ console.log(`Hub[myErrors] Module:              ${myErrors.module}`);
 console.log(`Error[MY_TEST_ERROR2] Module:      ${MY_TEST_ERROR2.module}`);
 
 console.log(`Error[INVALID_ERROR_NAME] Module:  ${errors.get("INVALID_ERROR_NAME").module}`);
+
+console.log(`Error[MY_TEST_ERROR2] Source:      ${myErrors.get("MY_TEST_ERROR2").defaultMetadata.source}`);

@@ -7,7 +7,7 @@
 ```ts
 declare const DEFAULT_ERROR_HUB_MODULE = "unknown";
 
-declare function createErrorHub<M extends {}>(
+declare function createErrorHub<M extends DefaultMetadataType>(
     moduleName: string = DEFAULT_ERROR_HUB_MODULE
 ): IErrorHub<M>;
 ```

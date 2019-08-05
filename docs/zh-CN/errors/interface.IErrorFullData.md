@@ -5,7 +5,7 @@
 ## 结构
 
 ```ts
-interface interface IErrorFullData<M extends {}> extends IErrorData<M> {
+interface interface IErrorFullData<M extends DefaultMetadataType> extends IErrorData<M> {
 
     /**
      * 异常所在的调用栈信息。

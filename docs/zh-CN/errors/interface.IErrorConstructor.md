@@ -5,7 +5,7 @@
 ## 结构
 
 ```ts
-interface IErrorConstructor<M extends {}> {
+interface IErrorConstructor<M extends DefaultMetadataType> {
 
     /**
      * 异常对象的构造函数。
@@ -34,6 +34,11 @@ interface IErrorConstructor<M extends {}> {
      * 定义该异常的模块名称（而不一定是抛出异常的模块名称）。
      */
     readonly module: string;
+
+    /**
+     * 默认的元数据。
+     */
+    readonly defaultMetadata: M;
 }
 ```
 
