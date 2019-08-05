@@ -25,7 +25,7 @@ interface IErrorHub<M extends DefaultMetadataType> {
         code: number | null,
         name: string,
         message: string,
-        metadata?: M2
+        metadata: M2
     ): IErrorConstructor<M2>;
 
     /**

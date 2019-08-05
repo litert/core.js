@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v1.0.5
+
+- Allow using partial metadata while create new error object.
+
 ## v1.0.4
 
 - Added default metadata property for Error consturctor and definition.

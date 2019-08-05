@@ -144,7 +144,7 @@ export interface IErrorConstructor<M extends DefaultMetadataType> {
      */
     new (opts?: {
         message?: string;
-        metadata?: M;
+        metadata?: Partial<M>;
     }): IError<M>;
 
     /**
@@ -288,7 +288,7 @@ export interface IErrorHub<M extends DefaultMetadataType> {
         code: number | null,
         name: string,
         message: string,
-        metadata?: M2
+        metadata: M2
     ): IErrorConstructor<M2>;
 
     /**
@@ -495,25 +495,29 @@ DEFAULT_HUB = createErrorHub<DefaultMetadataType>("@litert/core");
 DEFAULT_HUB.define(
     null,
     "INVALID_ERROR_NAME",
-    `Invalid name for error definition.`
+    `Invalid name for error definition.`,
+    {}
 );
 
 DEFAULT_HUB.define(
     null,
     "INVALID_ERROR_CODE",
-    `Invalid code for error definition.`
+    `Invalid code for error definition.`,
+    {}
 );
 
 DEFAULT_HUB.define(
     null,
     "DUPLICATED_ERROR_NAME",
-    `The name of new error already exists.`
+    `The name of new error already exists.`,
+    {}
 );
 
 DEFAULT_HUB.define(
     null,
     "DUPLICATED_ERROR_CODE",
-    `The code of new error already exists.`
+    `The code of new error already exists.`,
+    {}
 );
 
 /**

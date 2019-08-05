@@ -20,7 +20,7 @@ import * as Core from "../lib";
 
 const errors = Core.getDefaultErrorHub();
 
-const TEST_ERROR = errors.define(123, "TEST_ERROR", "This is a test error.");
+const TEST_ERROR = errors.define(123, "TEST_ERROR", "This is a test error.", {});
 
 console.error(JSON.stringify(new TEST_ERROR().toJSON(true), null, 2));
 
@@ -37,7 +37,10 @@ const myErrors = Core.createErrorHub();
 const MY_TEST_ERROR1 = myErrors.define<IMyErrorMetadata>(
     1,
     "MY_TEST_ERROR1",
-    "Custom error 1"
+    "Custom error 1",
+    {
+        source: "UK"
+    }
 );
 
 /**
@@ -58,7 +61,7 @@ console.error(JSON.stringify(new MY_TEST_ERROR1({
     }
 }).toJSON(true), null, 2));
 
-if (Core.isError(new MY_TEST_ERROR2())) {
+if (Core.isError(new MY_TEST_ERROR2({ metadata: {} }))) {
 
     console.log(MY_TEST_ERROR2.message);
     console.log(new MY_TEST_ERROR2().metadata.source);
@@ -70,7 +73,10 @@ try {
     myErrors.define<IMyErrorMetadata>(
         2,
         "MY_TEST_ERROR2",
-        "Custom error 2"
+        "Custom error 2",
+        {
+            source: "RU"
+        }
     );
 }
 catch (e) {
