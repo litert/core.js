@@ -31,6 +31,16 @@ interface IErrorData<M extends DefaultMetadataType> {
      * 定义该异常的模块名称（而不一定是抛出异常的模块名称）。
      */
     module: string;
+
+    /**
+     * 该异常的其他可用错误码。
+     */
+    aliasCodes: number[];
+
+    /**
+     * 该异常的其他可用名称。
+     */
+    aliases: string[];
 }
 ```
 

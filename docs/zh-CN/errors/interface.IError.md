@@ -38,6 +38,16 @@ interface IError<M extends DefaultMetadataType = DefaultMetadataType> {
     readonly module: string;
 
     /**
+     * 该异常的其他可用错误码。
+     */
+    readonly aliasCodes: number[];
+
+    /**
+     * 该异常的其他可用名称。
+     */
+    readonly aliases: string[];
+
+    /**
      * 获取异常所在的调用栈信息数组。
      */
     getStackAsArray(): string[];

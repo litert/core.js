@@ -52,7 +52,9 @@ const MY_TEST_ERROR2 = myErrors.define<IMyErrorMetadata>(
     "Custom error 2",
     {
         "source": "China"
-    }
+    },
+    [1234],
+    ["HEIHEIHEI"]
 );
 
 console.error(JSON.stringify(new MY_TEST_ERROR1({
@@ -64,8 +66,11 @@ console.error(JSON.stringify(new MY_TEST_ERROR1({
 if (Core.isError(new MY_TEST_ERROR2({ metadata: {} }))) {
 
     console.log(MY_TEST_ERROR2.message);
+    console.log(MY_TEST_ERROR2.aliasCodes);
+    console.log(MY_TEST_ERROR2.aliases);
     console.log(new MY_TEST_ERROR2().metadata.source);
     console.log(new MY_TEST_ERROR2({ "metadata": { "source": "Japan" } }).metadata.source);
+    console.log(new MY_TEST_ERROR2({ "metadata": { "source": "Japan" } }).aliasCodes);
 }
 
 try {
@@ -93,3 +98,7 @@ console.log(`Error[MY_TEST_ERROR2] Module:      ${MY_TEST_ERROR2.module}`);
 console.log(`Error[INVALID_ERROR_NAME] Module:  ${errors.get("INVALID_ERROR_NAME").module}`);
 
 console.log(`Error[MY_TEST_ERROR2] Source:      ${myErrors.get("MY_TEST_ERROR2").defaultMetadata.source}`);
+
+console.log(`Error[1234] Name:                  ${myErrors.get(1234).name}`);
+
+console.log(`Error[HEIHEIHEI] Name:             ${myErrors.get("HEIHEIHEI").name}`);

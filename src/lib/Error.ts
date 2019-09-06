@@ -28,10 +28,20 @@ export interface IErrorData<M extends DefaultMetadataType> {
     code: number;
 
     /**
+     * The other code of this error.
+     */
+    aliasCodes: number[];
+
+    /**
      * The string-code of an error, as the name, used to identify the type or
      * the reason of the error.
      */
     name: string;
+
+    /**
+     * The other names of this error.
+     */
+    aliases: string[];
 
     /**
      * The detail description of an error, used to describe the details of the
@@ -73,10 +83,20 @@ export interface IError<M extends DefaultMetadataType = DefaultMetadataType> {
     readonly code: number;
 
     /**
+     * The other code of this error.
+     */
+    readonly aliasCodes: number[];
+
+    /**
      * The string-code of an error, as the name, used to identify the type or
      * the reason of the error.
      */
     readonly name: string;
+
+    /**
+     * The other names of this error.
+     */
+    readonly aliases: string[];
 
     /**
      * The detail description of an error, used to describe the details of the
@@ -153,6 +173,11 @@ export interface IErrorConstructor<M extends DefaultMetadataType> {
     readonly name: string;
 
     /**
+     * The other names of this error.
+     */
+    readonly aliases: string[];
+
+    /**
      * The default description of the error.
      */
     readonly message: string;
@@ -161,6 +186,11 @@ export interface IErrorConstructor<M extends DefaultMetadataType> {
      * The code of the error.
      */
     readonly code: number;
+
+    /**
+     * The other code of this error.
+     */
+    readonly aliasCodes: number[];
 
     /**
      * The name of module thats emit this error.
@@ -207,6 +237,16 @@ Object.defineProperties(this, {
         "writable": false,
         "configurable": false,
         "value": {}
+    },
+    "aliasCodes": {
+        "writable": false,
+        "configurable": false,
+        "value": aliasCodes
+    },
+    "aliases": {
+        "writable": false,
+        "configurable": false,
+        "value": aliases
     }
 });
 `;
@@ -225,7 +265,14 @@ Object.defineProperties(this, {
     }
 
     let ret = Function(
-        "code", "name", "message", "metadata", "moduleName", THE_CONSTRUCTOR
+        "code",
+        "name",
+        "message",
+        "metadata",
+        "moduleName",
+        "aliasCodes",
+        "aliases",
+        THE_CONSTRUCTOR
     );
 
     ret.prototype.getStackAsArray = function(this: IError<DefaultMetadataType>): string[] {
@@ -240,16 +287,20 @@ Object.defineProperties(this, {
 
         return withStack ? {
             "code": this.code,
+            "aliasCodes": this.aliasCodes,
             "message": this.message,
             "metadata": this.metadata,
             "module": this.module,
             "name": this.name,
+            "aliases": this.aliases,
             "stack": this.getStackAsArray()
         } : {
             "code": this.code,
+            "aliasCodes": this.aliasCodes,
             "message": this.message,
             "metadata": this.metadata,
             "module": this.module,
+            "aliases": this.aliases,
             "name": this.name
         };
     };
@@ -283,21 +334,26 @@ export interface IErrorHub<M extends DefaultMetadataType> {
      *                      The code is generated automatically if set to null.
      * @param name          The unique string-identity for the new error type.
      * @param message       The description for the new error type.
+     * @param metadata      The metadata of this new error.
+     * @param aliasCodes    The alias codes of this new error.
+     * @param aliases       The alias names of this new error.
      */
     define<M2 extends M = M>(
         code: number | null,
         name: string,
         message: string,
-        metadata: M2
+        metadata: M2,
+        aliasCodes?: number[],
+        aliases?: string[]
     ): IErrorConstructor<M2>;
 
     /**
-     * Get the error constructor by its name .
+     * Get the error constructor by its name or code.
      *
-     * @param name  The string-identity for the error type.
+     * @param identity  The string-identity or code-identity for the error type.
      */
     get<M2 extends M = M>(
-        name: string
+        identity: string | number
     ): IErrorConstructor<M2>;
 
     /**
@@ -340,13 +396,15 @@ implements IErrorHub<M> {
 
         this._baseError = (Function(
             "BaseError", `class __ extends BaseError {
-    constructor(code, name, message, metadata, moduleName) {
+    constructor(code, name, message, metadata, moduleName, aliasCodes, aliases) {
         super(
             code,
             name,
             message,
             metadata,
-            moduleName
+            moduleName,
+            aliasCodes,
+            aliases
         );
     };
 }
@@ -375,7 +433,9 @@ return __;`
         code: number | null,
         name: string,
         message: string,
-        metadata?: M2
+        metadata?: M2,
+        aliasCodes: number[] = [],
+        aliases: string[] = []
     ): IErrorConstructor<M2> {
 
         if (!/^[a-z]\w+$/i.test(name)) {
@@ -413,6 +473,21 @@ return __;`
             });
         }
 
+        if (aliases.length) {
+
+            for (const alias of aliases) {
+
+                if (this._errors[alias]) {
+
+                    const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_NAME");
+
+                    throw new TheError({
+                        message: `The name ${JSON.stringify(alias)} of new error already exists.`
+                    });
+                }
+            }
+        }
+
         if (this._errors[code]) {
 
             const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
@@ -422,7 +497,22 @@ return __;`
             });
         }
 
-        return this._errors[code] = this._errors[name] = (Function(
+        if (aliasCodes.length) {
+
+            for (const alias of aliasCodes) {
+
+                if (this._errors[alias]) {
+
+                    const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
+
+                    throw new TheError({
+                        message: `The code ${JSON.stringify(alias)} of new error already exists.`
+                    });
+                }
+            }
+        }
+
+        this._errors[code] = this._errors[name] = (Function(
             "BaseError", "metadata", `class ${name} extends BaseError {
     constructor(opts = {}) {
         super(
@@ -430,7 +520,9 @@ return __;`
             ${JSON.stringify(name)},
             opts.message || ${JSON.stringify(message)},
             { ...metadata, ...opts.metadata },
-            ${JSON.stringify(this._module)}
+            ${JSON.stringify(this._module)},
+            ${JSON.stringify(aliasCodes)},
+            ${JSON.stringify(aliases)}
         );
     };
 }
@@ -456,6 +548,16 @@ Object.defineProperties(${name}, {
         "configurable": false,
         "value": ${JSON.stringify(this._module)}
     },
+    "aliases": {
+        "writable": false,
+        "configurable": false,
+        "value": ${JSON.stringify(aliases)}
+    },
+    "aliasCodes": {
+        "writable": false,
+        "configurable": false,
+        "value": ${JSON.stringify(aliasCodes)}
+    },
     "defaultMetadata": {
         "writable": false,
         "configurable": false,
@@ -465,6 +567,24 @@ Object.defineProperties(${name}, {
 
 return ${name};`
         ))(this._baseError, metadata) as any;
+
+        if (aliasCodes) {
+
+            for (const alias of aliasCodes) {
+
+                this._errors[alias] = this._errors[code];
+            }
+        }
+
+        if (aliases) {
+
+            for (const alias of aliases) {
+
+                this._errors[alias] = this._errors[code];
+            }
+        }
+
+        return this._errors[code];
     }
 
     public get<M2 extends M>(

@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v1.0.6
+
+- Added alias supports for error codes and names.
+
 ## v1.0.5
 
 - Allow using partial metadata while create new error object.

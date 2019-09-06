@@ -20,12 +20,16 @@ interface IErrorHub<M extends DefaultMetadataType> {
      * @param name          新异常类型的唯一名称。
      * @param message       新异常类型的说明文字。
      * @param metadata      定义默认的元数据值。
+     * @param aliasCodes    定义异常类型的其他可用数字错误号。
+     * @param aliases       定义异常类型的其他可用名称。
      */
     define<M2 extends M = M>(
         code: number | null,
         name: string,
         message: string,
-        metadata: M2
+        metadata: M2,
+        aliasCodes?: number[],
+        aliases?: string[]
     ): IErrorConstructor<M2>;
 
     /**

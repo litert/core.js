@@ -39,6 +39,16 @@ interface IErrorConstructor<M extends DefaultMetadataType> {
      * 默认的元数据。
      */
     readonly defaultMetadata: M;
+
+    /**
+     * 该异常的其他可用错误码。
+     */
+    readonly aliasCodes: number[];
+
+    /**
+     * 该异常的其他可用名称。
+     */
+    readonly aliases: string[];
 }
 ```
 
