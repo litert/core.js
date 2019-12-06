@@ -1,6 +1,6 @@
 {
   "name": "@litert/core",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "The core of LiteRT.",
   "main": "lib/index.js",
   "scripts": {

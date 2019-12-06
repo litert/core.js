@@ -348,6 +348,13 @@ export interface IErrorHub<M extends DefaultMetadataType> {
     ): IErrorConstructor<M2>;
 
     /**
+     * Set the base of error code number while defining an error with an omitted code number.
+     *
+     * @param codeBase The new base of error code number.
+     */
+    setCodeBase(codeBase: number): this;
+
+    /**
      * Get the error constructor by its name or code.
      *
      * @param identity  The string-identity or code-identity for the error type.
@@ -385,6 +392,13 @@ implements IErrorHub<M> {
     private _counter: number;
 
     private _module: string;
+
+    public setCodeBase(codeBase: number): this {
+
+        this._counter = codeBase;
+
+        return this;
+    }
 
     public constructor(moduleName: string) {
 
@@ -459,9 +473,19 @@ return __;`
                 message: `Invalid code ${JSON.stringify(code)} for error definition.`
             });
         }
-        else {
 
-            this._counter = code;
+        if (this._errors[code]) {
+
+            const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
+
+            throw new TheError({
+                message: `The code ${JSON.stringify(code)} of new error already exists.`
+            });
+        }
+
+        if (code > this._counter) {
+
+            this._counter = code + 1;
         }
 
         if (this._errors[name]) {
@@ -486,15 +510,6 @@ return __;`
                     });
                 }
             }
-        }
-
-        if (this._errors[code]) {
-
-            const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
-
-            throw new TheError({
-                message: `The code ${JSON.stringify(code)} of new error already exists.`
-            });
         }
 
         if (aliasCodes.length) {

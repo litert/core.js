@@ -42,6 +42,22 @@ interface IErrorHub<M extends DefaultMetadataType> {
     ): IErrorConstructor<M2>;
 
     /**
+     * 设置递增错误号的起始值。
+     *
+     * @param codeBase 新的递增错误号值。
+     */
+    setCodeBase(codeBase: number): this;
+
+    /**
+     * 获取指定异常的构造器。
+     *
+     * @param name          异常类型的唯一名称。
+     */
+    get<M2 extends M = M>(
+        name: string
+    ): IErrorConstructor<M2>;
+
+    /**
      * 判断一个异常对象是否创建自该异常管理器。
      *
      * @param e     待检查的异常对象。

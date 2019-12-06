@@ -1,5 +1,11 @@
 # Changes Logs
 
+## v1.0.7
+
+- Added `setCodeBase` method for `IErrorHub`.
+- Now the counter of auto-increase code number will be overwritten by a bigger specific code number
+  while defining a new error.
+
 ## v1.0.6
 
 - Added alias supports for error codes and names.
