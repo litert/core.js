@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,36 +18,35 @@
 
 import * as Core from "../lib";
 
-(async () => {
+const TESTS: string[] = [
+    "",
+    "localhost",
+    "127.0.0.1",
+    "a.com",
+    ".",
+    "com.",
+    ".com",
+    "-",
+    "_",
+    "g_",
+    "g-",
+    "c+",
+    "c!",
+    "a.b.c.d",
+    "www.google.com",
+    ".google.com"
+];
 
-    let ret = new Core.TimeoutPromise<string, Error>(
-        100,
-        new Error("TIMEOUT"),
-        true,
-        function(result): void {
+const MAX_LENGTH = Math.max(...TESTS.map((x) => x.length)) + 4;
 
-            if (result.value) {
+for (const item of TESTS) {
 
-                console.log(`Timeout Result:`, result.value);
-            }
-            else if (result.error) {
+    if (Core.Validators.isDomain(item)) {
 
-                console.error(`Timeout Error:`, result.error);
-            }
-        }
-    );
-
-    setTimeout(ret.resolve, 300, "hello");
-
-    try {
-
-        await ret.promise;
-
-        console.log("Not timeout.");
+        console.info(`${item.padEnd(MAX_LENGTH, " ")} -> Yes`);
     }
-    catch (e) {
+    else {
 
-        console.error(e);
+        console.error(`${item.padEnd(MAX_LENGTH, " ")} -> No`);
     }
-
-})();
+}

@@ -1,5 +1,9 @@
 # 类 RawPromise
 
+[@litert/observable]: https://github.com/litert/observable.js
+
+> **DEPRECATED：该内容将在 v2.0.0 中移除，请使用 [`@litert/observable`][@litert/observable] 代替。**
+
 该类提供一个简单的 Promise 工具类，能够将 resolve 和 reject 从回调中提取
 出来，变成一个对象使用。
 

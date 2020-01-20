@@ -1,6 +1,6 @@
 {
   "name": "@litert/core",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "The core of LiteRT.",
   "main": "lib/index.js",
   "scripts": {
@@ -8,8 +8,8 @@
     "build": "echo Using TypeScript && tsc -v && tsc -p .",
     "build-watch": "echo Using TypeScript && tsc -v && tsc -w -p .",
     "rebuild": "npm run clean && npm run lint && npm run build",
-    "test": "echo See directory src/samples",
-    "clean": "rm -rf lib samples",
+    "test": "echo See directory src/examples",
+    "clean": "rm -rf lib examples",
     "lint": "tslint -p . -c tslint.json"
   },
   "repository": {

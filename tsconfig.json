@@ -68,7 +68,7 @@
   "exclude": [
     "./lib/*.ts",
     "./lib/**/*.ts",
-    "./samples/*.ts",
-    "./samples/**/*.ts"
+    "./examples/*.ts",
+    "./examples/**/*.ts"
   ]
 }

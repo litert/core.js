@@ -18,4 +18,4 @@ declare function createErrorHub<M extends DefaultMetadataType>(
 
 ## 示例
 
-[查看源文件。](../../../src/samples/01-errors.ts)
+[查看源文件。](../../../src/examples/01-errors.ts)

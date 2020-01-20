@@ -7,97 +7,97 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Core.js] Sample 01 - Errors",
-            "program": "${workspaceFolder}/src/samples/01-errors.ts",
+            "name": "[LiteRT/Core.js] Example 01 - Errors",
+            "program": "${workspaceFolder}/src/examples/01-errors.ts",
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/lib/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Core.js] Sample 02 - Async.sleep",
-            "program": "${workspaceFolder}/src/samples/02-async.sleep.ts",
+            "name": "[LiteRT/Core.js] Example 02 - Async.sleep",
+            "program": "${workspaceFolder}/src/examples/02-async.sleep.ts",
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/lib/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Core.js] Sample 03 - Async.multiTasks",
-            "program": "${workspaceFolder}/src/samples/03-async.multiTasks.ts",
+            "name": "[LiteRT/Core.js] Example 03 - Async.multiTasks",
+            "program": "${workspaceFolder}/src/examples/03-async.multiTasks.ts",
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Core.js] Sample 04 - class.TimeoutPromise",
-            "program": "${workspaceFolder}/src/samples/04-class.TimeoutPromise.ts",
+            "name": "[LiteRT/Core.js] Example 04 - class.TimeoutPromise",
+            "program": "${workspaceFolder}/src/examples/04-class.TimeoutPromise.ts",
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Core.js] Sample 05 - Async.nextTick",
-            "program": "${workspaceFolder}/src/samples/05-async.nextTick.ts",
+            "name": "[LiteRT/Core.js] Example 05 - Async.nextTick",
+            "program": "${workspaceFolder}/src/examples/05-async.nextTick.ts",
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Core.js] Sample 06 - Validators.isDomain",
-            "program": "${workspaceFolder}/src/samples/06-validators.isDomain.ts",
+            "name": "[LiteRT/Core.js] Example 06 - Validators.isDomain",
+            "program": "${workspaceFolder}/src/examples/06-validators.isDomain.ts",
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Core.js] Sample 07 - Validators.isEMailAddress",
-            "program": "${workspaceFolder}/src/samples/07-validators.isEMailAddress.ts",
+            "name": "[LiteRT/Core.js] Example 07 - Validators.isEMailAddress",
+            "program": "${workspaceFolder}/src/examples/07-validators.isEMailAddress.ts",
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "[LiteRT/Core.js] Sample 08 - class.RawPromise",
-            "program": "${workspaceFolder}/src/samples/08-class.RawPromise.ts",
+            "name": "[LiteRT/Core.js] Example 08 - class.RawPromise",
+            "program": "${workspaceFolder}/src/examples/08-class.RawPromise.ts",
             "sourceMaps": true,
             "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         }
     ]

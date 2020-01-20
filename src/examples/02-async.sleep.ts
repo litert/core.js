@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,35 +18,17 @@
 
 import * as Core from "../lib";
 
-const TESTS: string[] = [
-    "",
-    "localhost",
-    "127.0.0.1",
-    "a.com",
-    ".",
-    "com.",
-    ".com",
-    "-",
-    "_",
-    "g_",
-    "g-",
-    "c+",
-    "c!",
-    "a.b.c.d",
-    "www.google.com",
-    ".google.com"
-];
+(async () => {
 
-const MAX_LENGTH = Math.max(...TESTS.map((x) => x.length)) + 4;
+    console.log(new Date().toISOString());
 
-for (const item of TESTS) {
+    const result = await Core.Async.sleep(1000, "cc", 123, true);
 
-    if (Core.Validators.isDomain(item)) {
+    console.log(new Date().toISOString());
 
-        console.info(`${item.padEnd(MAX_LENGTH, " ")} -> Yes`);
+    for (let i = 0; i < result.length; i++) {
+
+        console.info(`result[${i}] = ${JSON.stringify(result[i])}`);
     }
-    else {
 
-        console.error(`${item.padEnd(MAX_LENGTH, " ")} -> No`);
-    }
-}
+})();

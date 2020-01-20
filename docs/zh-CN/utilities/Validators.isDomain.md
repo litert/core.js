@@ -23,10 +23,10 @@ declare function isDomain(domain: string): boolean;
 
 ## 示例
 
-[查看源文件。](../../../src/samples/06-validators.isDomain.ts)
+[查看源文件。](../../../src/examples/06-validators.isDomain.ts)
 
 ```ts
-// File: src/samples/06-validators.isDomain.ts
+// File: src/examples/06-validators.isDomain.ts
 
 import * as Core from "@litert/core";
 

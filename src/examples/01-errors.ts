@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ interface IMyErrorMetadata {
     source: string;
 }
 
-const myErrors = Core.createErrorHub();
+const myErrors = Core.createErrorHub("@litert/core#error-example");
 
 /**
  * Type 1 of error.
@@ -102,3 +102,23 @@ console.log(`Error[MY_TEST_ERROR2] Source:      ${myErrors.get("MY_TEST_ERROR2")
 console.log(`Error[1234] Name:                  ${myErrors.get(1234).name}`);
 
 console.log(`Error[HEIHEIHEI] Name:             ${myErrors.get("HEIHEIHEI").name}`);
+
+new MY_TEST_ERROR1().warn();
+
+myErrors.removeWarningListener(Core.DEFAULT_WARNING_LISTENER_KEY);
+
+myErrors.addWarningListener("hello", (e) => console.warn("A wanring was emitted."));
+
+new MY_TEST_ERROR1().warn();
+
+myErrors.forceWarningAsError(true);
+
+try {
+
+    new MY_TEST_ERROR1().warn();
+}
+catch (e) {
+
+    console.error(`A warning was thrown out as an error.
+${e}`);
+}

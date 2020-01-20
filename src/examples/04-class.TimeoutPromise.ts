@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,28 +18,36 @@
 
 import * as Core from "../lib";
 
-async function makePromise(ms: number): Promise<number> {
-
-    await Core.Async.sleep(ms);
-
-    const ret = Math.floor(Math.random() * 10);
-
-    if (ret >= 5) {
-
-        return ret;
-    }
-
-    throw new Error("Failed.");
-}
-
 (async () => {
 
-    const result = await Core.Async.multiTasks(
-        Array(10).fill(0).map(
-            (x) => Math.floor(Math.random() * 1000)
-        ).map(makePromise)
+    let ret = new Core.TimeoutPromise<string, Error>(
+        100,
+        new Error("TIMEOUT"),
+        true,
+        function(result): void {
+
+            if (result.value) {
+
+                console.log(`Timeout Result:`, result.value);
+            }
+            else if (result.error) {
+
+                console.error(`Timeout Error:`, result.error);
+            }
+        }
     );
 
-    console.log(JSON.stringify(result, null, 2));
+    setTimeout(ret.resolve, 300, "hello");
+
+    try {
+
+        await ret.promise;
+
+        console.log("Not timeout.");
+    }
+    catch (e) {
+
+        console.error(e);
+    }
 
 })();

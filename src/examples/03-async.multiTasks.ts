@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,28 @@
 
 import * as Core from "../lib";
 
+async function makePromise(ms: number): Promise<number> {
+
+    await Core.Async.sleep(ms);
+
+    const ret = Math.floor(Math.random() * 10);
+
+    if (ret >= 5) {
+
+        return ret;
+    }
+
+    throw new Error("Failed.");
+}
+
 (async () => {
 
-    let rp = new Core.RawPromise<number>();
+    const result = await Core.Async.multiTasks(
+        Array(10).fill(0).map(
+            (x) => Math.floor(Math.random() * 1000)
+        ).map(makePromise)
+    );
 
-    /**
-     * This couldn't work in v1.0.2.
-     */
-    setTimeout(rp.resolve, 1000, 123456);
-
-    console.log(await rp.promise);
+    console.log(JSON.stringify(result, null, 2));
 
 })();

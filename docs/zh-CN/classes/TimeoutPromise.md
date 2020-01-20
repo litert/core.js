@@ -1,5 +1,9 @@
 # 类 TimeoutPromise
 
+[@litert/observable]: https://github.com/litert/observable.js
+
+> **DEPRECATED：该内容将在 v2.0.0 中移除，请使用 [`@litert/observable`][@litert/observable] 代替。**
+
 该类提供一个具有超时功能的 Promise 工具类，且能够将 resolve 和 reject 从回调中提取
 出来，变成一个对象使用。
 
@@ -51,4 +55,4 @@ declare class TimeoutPromise<T = void, E = Error> {
 
 ## 示例
 
-[查看源文件。](../../../src/samples/04-class.TimeoutPromise.ts)
+[查看源文件。](../../../src/examples/04-class.TimeoutPromise.ts)

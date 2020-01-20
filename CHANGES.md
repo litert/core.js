@@ -1,5 +1,10 @@
 # Changes Logs
 
+## v1.1.0
+
+- Added wanring handling mechanism.
+- Improved the `toString` of `IError` objects.
+
 ## v1.0.6
 
 - Added alias supports for error codes and names.

@@ -16,10 +16,10 @@ declare function multiTasks<T, E>(
 
 ## 示例
 
-[查看源文件。](../../../src/samples/03-async.multiTasks.ts)
+[查看源文件。](../../../src/examples/03-async.multiTasks.ts)
 
 ```ts
-// File: src/samples/03-async.multiTasks.ts
+// File: src/examples/03-async.multiTasks.ts
 import * as Core from "@litert/core";
 
 async function makePromise(ms: number): Promise<number> {

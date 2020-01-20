@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,6 +135,11 @@ export interface IError<M extends DefaultMetadataType = DefaultMetadataType> {
     toJSON(withStack?: false): IErrorData<M>;
 
     toJSON(withStack: true): IErrorFullData<M>;
+
+    /**
+     * Emit as a warning.
+     */
+    warn(): this;
 }
 
 interface IBaseError {
@@ -307,7 +312,7 @@ Object.defineProperties(this, {
 
     ret.prototype.toString = function(this: IError<DefaultMetadataType>): string {
 
-        return `Error ${this.code} (${this.name}): ${this.message}
+        return `Error #${this.code} (${this.name} from ${this.module}): ${this.message}
   Call Stack:
     ${this.getStackAsArray().join("\n    ")}`;
     };
@@ -371,61 +376,151 @@ export interface IErrorHub<M extends DefaultMetadataType> {
      * @param id    The name or code of error type to be checked.
      */
     is(e: any, id?: string | number): e is IError<M>;
+
+    /**
+     * Emit a warning.
+     *
+     * @param e     The details of warning.
+     */
+    warn(e: IError): this;
+
+    /**
+     * Force throwing warnings as errors.
+     *
+     * @param enabled   Set to true to force throwing warnings as exceptions. [Default: true]
+     */
+    forceWarningAsError(enabled?: boolean): this;
+
+    /**
+     * Add a new listener callback for warnings.
+     *
+     * @param key       The key of listener.
+     * @param listener  The callback of listener.
+     */
+    addWarningListener(key: string, listener: (e: IError) => void): this;
+
+    /**
+     * Remove an existing listener by key.
+     *
+     * @param key       The key of listener.
+     */
+    removeWarningListener(key: string): this;
 }
 
 let DEFAULT_HUB: IErrorHub<Record<string, any>>;
 
+interface IErrorHubPrivateData {
+
+    errors: Record<string, IErrorConstructor<any>>;
+
+    baseError: IBaseError;
+
+    counter: number;
+
+    module: string;
+
+    warningListeners: Record<string, (e: IError) => void>;
+
+    warningAsError: boolean;
+}
+
+const HUB_SECRETS = new WeakMap<any, IErrorHubPrivateData>();
+
 class ErrorHub<M extends DefaultMetadataType>
 implements IErrorHub<M> {
 
-    private _errors: Record<string, IErrorConstructor<any>>;
-
-    private _baseError: IBaseError;
-
-    private _counter: number;
-
-    private _module: string;
-
     public constructor(moduleName: string) {
 
-        this._counter = 0;
+        HUB_SECRETS.set(this, {
+            warningListeners: {},
+            warningAsError: false,
+            counter: 0,
+            errors: {},
+            module: moduleName,
+            baseError: (Function(
+                "BaseError", `class __ extends BaseError {
+        constructor(code, name, message, metadata, moduleName, aliasCodes, aliases) {
+            super(
+                code,
+                name,
+                message,
+                metadata,
+                moduleName,
+                aliasCodes,
+                aliases
+            );
+        };
+    }
+    return __;`
+            ))(BaseError, moduleName) as any
+        });
+    }
 
-        this._errors = {};
+    public removeWarningListener(key: string): this {
 
-        this._module = moduleName;
+        delete (HUB_SECRETS.get(this) as IErrorHubPrivateData).warningListeners[key];
 
-        this._baseError = (Function(
-            "BaseError", `class __ extends BaseError {
-    constructor(code, name, message, metadata, moduleName, aliasCodes, aliases) {
-        super(
-            code,
-            name,
-            message,
-            metadata,
-            moduleName,
-            aliasCodes,
-            aliases
-        );
-    };
-}
-return __;`
-        ))(BaseError, this._module) as any;
+        return this;
+    }
+
+    public addWarningListener(key: string, callback: (e: IError) => void): this {
+
+        const _this = HUB_SECRETS.get(this) as IErrorHubPrivateData;
+
+        if (_this.warningListeners[key]) {
+
+            const TheError = DEFAULT_HUB.get("DUPLICATED_WARNING_LISTENER");
+
+            throw new TheError({
+                message: `Duplicated key of warning listener: ${JSON.stringify(name)}.`
+            });
+        }
+
+        _this.warningListeners[key] = callback;
+
+        return this;
+    }
+
+    public forceWarningAsError(enabled: boolean = true): this {
+
+        (HUB_SECRETS.get(this) as IErrorHubPrivateData).warningAsError = enabled;
+
+        return this;
+    }
+
+    public warn(e: IError): this {
+
+        const _this = HUB_SECRETS.get(this) as IErrorHubPrivateData;
+
+        if (_this.warningAsError) {
+
+            throw e;
+        }
+
+        for (const k in _this.warningListeners) {
+
+            _this.warningListeners[k](e);
+        }
+
+        return this;
     }
 
     public get module(): string {
 
-        return this._module;
+        return (HUB_SECRETS.get(this) as IErrorHubPrivateData).module;
     }
 
     public is(e: any, id?: string | number): e is IError<M> {
 
+        const _this = HUB_SECRETS.get(this) as IErrorHubPrivateData;
+
         if (typeof id !== "undefined") {
 
-            return (!!this._errors[id]) && (e instanceof this._errors[id]);
+            return (!!_this.errors[id]) && (e instanceof _this.errors[id]);
         }
         else {
 
-            return e instanceof this._baseError;
+            return e instanceof _this.baseError;
         }
     }
 
@@ -438,6 +533,8 @@ return __;`
         aliases: string[] = []
     ): IErrorConstructor<M2> {
 
+        const _this = HUB_SECRETS.get(this) as IErrorHubPrivateData;
+
         if (!/^[a-z]\w+$/i.test(name)) {
 
             const TheError = DEFAULT_HUB.get("INVALID_ERROR_NAME");
@@ -449,7 +546,7 @@ return __;`
 
         if (code === null) {
 
-            code = this._counter++;
+            code = _this.counter++;
         }
         else if (!Number.isSafeInteger(code)) {
 
@@ -461,10 +558,10 @@ return __;`
         }
         else {
 
-            this._counter = code;
+            _this.counter = code;
         }
 
-        if (this._errors[name]) {
+        if (_this.errors[name]) {
 
             const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_NAME");
 
@@ -477,7 +574,7 @@ return __;`
 
             for (const alias of aliases) {
 
-                if (this._errors[alias]) {
+                if (_this.errors[alias]) {
 
                     const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_NAME");
 
@@ -488,7 +585,7 @@ return __;`
             }
         }
 
-        if (this._errors[code]) {
+        if (_this.errors[code]) {
 
             const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
 
@@ -501,7 +598,7 @@ return __;`
 
             for (const alias of aliasCodes) {
 
-                if (this._errors[alias]) {
+                if (_this.errors[alias]) {
 
                     const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
 
@@ -512,18 +609,24 @@ return __;`
             }
         }
 
-        this._errors[code] = this._errors[name] = (Function(
-            "BaseError", "metadata", `class ${name} extends BaseError {
+        _this.errors[code] = _this.errors[name] = (Function(
+            "BaseError", "metadata", "hub", `class ${name} extends BaseError {
     constructor(opts = {}) {
         super(
             ${code},
             ${JSON.stringify(name)},
             opts.message || ${JSON.stringify(message)},
             { ...metadata, ...opts.metadata },
-            ${JSON.stringify(this._module)},
+            ${JSON.stringify(_this.module)},
             ${JSON.stringify(aliasCodes)},
             ${JSON.stringify(aliases)}
         );
+    };
+    warn() {
+
+        hub.warn(this);
+
+        return this;
     };
 }
 
@@ -546,7 +649,7 @@ Object.defineProperties(${name}, {
     "module": {
         "writable": false,
         "configurable": false,
-        "value": ${JSON.stringify(this._module)}
+        "value": ${JSON.stringify(_this.module)}
     },
     "aliases": {
         "writable": false,
@@ -566,13 +669,13 @@ Object.defineProperties(${name}, {
 });
 
 return ${name};`
-        ))(this._baseError, metadata) as any;
+        ))(_this.baseError, metadata, this) as any;
 
         if (aliasCodes) {
 
             for (const alias of aliasCodes) {
 
-                this._errors[alias] = this._errors[code];
+                _this.errors[alias] = _this.errors[code];
             }
         }
 
@@ -580,18 +683,18 @@ return ${name};`
 
             for (const alias of aliases) {
 
-                this._errors[alias] = this._errors[code];
+                _this.errors[alias] = _this.errors[code];
             }
         }
 
-        return this._errors[code];
+        return _this.errors[code];
     }
 
     public get<M2 extends M>(
         name: string
     ): IErrorConstructor<M2> {
 
-        return this._errors[name];
+        return (HUB_SECRETS.get(this) as IErrorHubPrivateData).errors[name];
     }
 }
 
@@ -600,6 +703,15 @@ return ${name};`
  */
 export const DEFAULT_ERROR_HUB_MODULE = "unknown";
 
+export const DEFAULT_WARNING_LISTENER_KEY = "litert:errors:hub:default-warning-listener";
+
+export const DEFAULT_WARNING_LISTENER = function(e: IError): void {
+
+    // tslint:disable-next-line: no-console
+    console.warn(`WARNING: A warning was emitted, and it may become an error in the future versions.
+${e}`);
+};
+
 /**
  * Create a new error hub that has a standalone namespace of error types.
  */
@@ -607,7 +719,10 @@ export function createErrorHub<M extends DefaultMetadataType>(
     moduleName: string = DEFAULT_ERROR_HUB_MODULE
 ): IErrorHub<M> {
 
-    return new ErrorHub<M>(moduleName);
+    return new ErrorHub<M>(moduleName).addWarningListener(
+        DEFAULT_WARNING_LISTENER_KEY,
+        DEFAULT_WARNING_LISTENER
+    );
 }
 
 DEFAULT_HUB = createErrorHub<DefaultMetadataType>("@litert/core");
@@ -637,6 +752,13 @@ DEFAULT_HUB.define(
     null,
     "DUPLICATED_ERROR_CODE",
     `The code of new error already exists.`,
+    {}
+);
+
+DEFAULT_HUB.define(
+    null,
+    "DUPLICATED_WARNING_LISTENER",
+    `The key of warning listener already exists.`,
     {}
 );
 

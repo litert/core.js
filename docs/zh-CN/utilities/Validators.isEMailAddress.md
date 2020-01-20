@@ -24,10 +24,10 @@ declare function isEMailAddress(email: string): boolean;
 
 ## 示例
 
-[查看源文件。](../../../src/samples/06-validators.isEMailAddress.ts)
+[查看源文件。](../../../src/examples/06-validators.isEMailAddress.ts)
 
 ```ts
-// File: src/samples/06-validators.isEMailAddress.ts
+// File: src/examples/06-validators.isEMailAddress.ts
 
 import * as Core from "@litert/core";
 

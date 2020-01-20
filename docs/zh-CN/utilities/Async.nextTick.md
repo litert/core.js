@@ -17,10 +17,10 @@ declare function nextTick<T extends any[]>(
 
 ## 示例
 
-[查看源文件。](../../../src/samples/05-async.nextTick.ts)
+[查看源文件。](../../../src/examples/05-async.nextTick.ts)
 
 ```ts
-// File: src/samples/05-async.nextTick.ts
+// File: src/examples/05-async.nextTick.ts
 
 import * as Core from "@litert/core";
 

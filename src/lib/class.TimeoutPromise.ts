@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,11 @@ export type ITimeoutResult<T, E> = {
 
 export type IPromiseTimeoutResultHandler<T, E> = (result: ITimeoutResult<T, E>) => void;
 
+/**
+ * A promise controllation with timeout.
+ *
+ * @deprecated Use `@litert/observable` instead. And this class will be removed in v2.0.0 version.
+ */
 export class TimeoutPromise<T = any, E = Error>
 extends RawPromise<T, E> {
 
@@ -53,6 +58,8 @@ extends RawPromise<T, E> {
      * @param timeoutError  The error object to be thrown if timeout
      * @param autoStart     Start the timer immediately.
      * @param handleTimeout Inject a handler to receiver the result after timeout.
+     *
+     * @deprecated Use `@litert/observable` instead. And this class will be removed in v2.0.0 version.
      */
     public constructor(
         msTimeout: number,

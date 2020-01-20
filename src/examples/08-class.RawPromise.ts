@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,13 @@ import * as Core from "../lib";
 
 (async () => {
 
-    console.log(new Date().toISOString());
+    let rp = new Core.RawPromise<number>();
 
-    const result = await Core.Async.sleep(1000, "cc", 123, true);
+    /**
+     * This couldn't work in v1.0.2.
+     */
+    setTimeout(rp.resolve, 1000, 123456);
 
-    console.log(new Date().toISOString());
-
-    for (let i = 0; i < result.length; i++) {
-
-        console.info(`result[${i}] = ${JSON.stringify(result[i])}`);
-    }
+    console.log(await rp.promise);
 
 })();

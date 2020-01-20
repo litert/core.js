@@ -68,6 +68,11 @@ interface IError<M extends DefaultMetadataType = DefaultMetadataType> {
      * @param {boolean} withStack 设置为 true 时，结果里包含异常的调用栈信息。
      */
     toJSON(withStack: true): IErrorFullData<M>;
+
+    /**
+     * 将该对象当成一个警告发送出去。
+     */
+    warn(): this;
 }
 ```
 

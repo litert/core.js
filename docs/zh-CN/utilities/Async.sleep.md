@@ -19,10 +19,10 @@ declare function sleep<T extends any[]>(
 
 ## 示例
 
-[查看源文件。](../../../src/samples/02-async.sleep.ts)
+[查看源文件。](../../../src/examples/02-async.sleep.ts)
 
 ```ts
-// File: src/samples/02-async.sleep.ts
+// File: src/examples/02-async.sleep.ts
 import * as Core from "@litert/core";
 
 (async () => {

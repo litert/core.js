@@ -50,6 +50,35 @@ interface IErrorHub<M extends DefaultMetadataType> {
     is<M2 extends M = M>(e: any, id?: string): e is IError<M2>;
 
     is(e: any, id?: string): e is IError<M>;
+
+    /**
+     * 将一个错误对象当成警告发送出去。
+     *
+     * @param e     错误对象。
+     */
+    warn(e: IError): this;
+
+    /**
+     * 强制将警告当成错误直接抛出。
+     *
+     * @param enabled   设置为 true 则强制将警告当错误直接抛出。【默认值：true】
+     */
+    forceWarningAsError(enabled?: boolean): this;
+
+    /**
+     * 注册一个警告处理函数。
+     *
+     * @param key       处理函数的唯一标识。
+     * @param listener  处理函数回调。
+     */
+    addWarningListener(key: string, listener: (e: IError) => void): this;
+
+    /**
+     * 移除一个警告处理函数。
+     *
+     * @param key       处理函数的唯一标识。
+     */
+    removeWarningListener(key: string): this;
 }
 ```
 

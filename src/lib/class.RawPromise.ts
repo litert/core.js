@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 Angus.Fenying
+ * Copyright 2020 Angus.Fenying <fenying@litert.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ export type IPromiseResolver<T> = (val?: T) => void;
  *
  * RawPromise extracts the rejector and resolver methods of a promise, and
  * exposes the Promise object.
+ *
+ * @deprecated Use `@litert/observable` instead. And this class will be removed in v2.0.0 version.
  */
 export class RawPromise<T = void, E = Error> {
 
