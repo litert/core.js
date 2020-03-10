@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-// tslint:disable:no-console
-
-import * as Core from "../lib";
+import * as Core from '../lib';
 
 const errors = Core.getDefaultErrorHub();
 
-const TEST_ERROR = errors.define(123, "TEST_ERROR", "This is a test error.", {});
+const TEST_ERROR = errors.define(123, 'TEST_ERROR', 'This is a test error.', {});
 
 console.error(JSON.stringify(new TEST_ERROR().toJSON(true), null, 2));
 
@@ -29,17 +27,17 @@ interface IMyErrorMetadata {
     source: string;
 }
 
-const myErrors = Core.createErrorHub("@litert/core#error-example");
+const myErrors = Core.createErrorHub('@litert/core#error-example');
 
 /**
  * Type 1 of error.
  */
 const MY_TEST_ERROR1 = myErrors.define<IMyErrorMetadata>(
     1,
-    "MY_TEST_ERROR1",
-    "Custom error 1",
+    'MY_TEST_ERROR1',
+    'Custom error 1',
     {
-        source: "UK"
+        source: 'UK'
     }
 );
 
@@ -48,18 +46,18 @@ const MY_TEST_ERROR1 = myErrors.define<IMyErrorMetadata>(
  */
 const MY_TEST_ERROR2 = myErrors.define<IMyErrorMetadata>(
     2,
-    "MY_TEST_ERROR2",
-    "Custom error 2",
+    'MY_TEST_ERROR2',
+    'Custom error 2',
     {
-        "source": "China"
+        'source': 'China'
     },
     [1234],
-    ["HEIHEIHEI"]
+    ['HEIHEIHEI']
 );
 
 console.error(JSON.stringify(new MY_TEST_ERROR1({
-    "metadata": {
-        "source": "USA"
+    'metadata': {
+        'source': 'USA'
     }
 }).toJSON(true), null, 2));
 
@@ -69,18 +67,18 @@ if (Core.isError(new MY_TEST_ERROR2({ metadata: {} }))) {
     console.log(MY_TEST_ERROR2.aliasCodes);
     console.log(MY_TEST_ERROR2.aliases);
     console.log(new MY_TEST_ERROR2().metadata.source);
-    console.log(new MY_TEST_ERROR2({ "metadata": { "source": "Japan" } }).metadata.source);
-    console.log(new MY_TEST_ERROR2({ "metadata": { "source": "Japan" } }).aliasCodes);
+    console.log(new MY_TEST_ERROR2({ 'metadata': { 'source': 'Japan' } }).metadata.source);
+    console.log(new MY_TEST_ERROR2({ 'metadata': { 'source': 'Japan' } }).aliasCodes);
 }
 
 try {
 
     myErrors.define<IMyErrorMetadata>(
         2,
-        "MY_TEST_ERROR2",
-        "Custom error 2",
+        'MY_TEST_ERROR2',
+        'Custom error 2',
         {
-            source: "RU"
+            source: 'RU'
         }
     );
 }
@@ -95,19 +93,19 @@ console.log(`Hub[myErrors] Module:              ${myErrors.module}`);
 
 console.log(`Error[MY_TEST_ERROR2] Module:      ${MY_TEST_ERROR2.module}`);
 
-console.log(`Error[INVALID_ERROR_NAME] Module:  ${errors.get("INVALID_ERROR_NAME").module}`);
+console.log(`Error[INVALID_ERROR_NAME] Module:  ${errors.get('INVALID_ERROR_NAME').module}`);
 
-console.log(`Error[MY_TEST_ERROR2] Source:      ${myErrors.get("MY_TEST_ERROR2").defaultMetadata.source}`);
+console.log(`Error[MY_TEST_ERROR2] Source:      ${myErrors.get('MY_TEST_ERROR2').defaultMetadata.source}`);
 
 console.log(`Error[1234] Name:                  ${myErrors.get(1234).name}`);
 
-console.log(`Error[HEIHEIHEI] Name:             ${myErrors.get("HEIHEIHEI").name}`);
+console.log(`Error[HEIHEIHEI] Name:             ${myErrors.get('HEIHEIHEI').name}`);
 
 new MY_TEST_ERROR1().warn();
 
 myErrors.removeWarningListener(Core.DEFAULT_WARNING_LISTENER_KEY);
 
-myErrors.addWarningListener("hello", (e) => console.warn("A wanring was emitted."));
+myErrors.addWarningListener('hello', (e) => console.warn('A wanring was emitted.'));
 
 new MY_TEST_ERROR1().warn();
 

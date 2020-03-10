@@ -18,7 +18,7 @@ const DOMAIN_REGEXP = /^[a-z0-9][-a-z0-9]{0,62}(\.[a-z0-9][-a-z0-9]{0,62})*$/i;
 
 const DOMAIN_MAX_LENGTH = 255;
 
-const EMAIL_REGEXP = /^[-+_a-z0-9][-+_\.a-z0-9]{0,62}@[a-z0-9][-a-z0-9]{0,62}(\.[a-z0-9][-a-z0-9]{0,62})*$/i;
+const EMAIL_REGEXP = /^[-+_a-z0-9][-+_.a-z0-9]{0,62}@[a-z0-9][-a-z0-9]{0,62}(\.[a-z0-9][-a-z0-9]{0,62})*$/i;
 
 const EMAIL_MAX_LENGTH = 255;
 
@@ -45,7 +45,7 @@ export function isEMailAddress(email: string): boolean {
 
     return email.length > 0 &&
            email.length < EMAIL_MAX_LENGTH &&
-           email.indexOf("..") === -1 &&
-           email.indexOf(".@") === -1 &&
+           email.indexOf('..') === -1 &&
+           email.indexOf('.@') === -1 &&
            EMAIL_REGEXP.test(email);
 }

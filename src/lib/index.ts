@@ -19,14 +19,14 @@
  */
 export type Nullable<T> = T | null;
 
-export * from "./class.RawPromise";
+export * from './class.RawPromise';
 
-export * from "./class.TimeoutPromise";
+export * from './class.TimeoutPromise';
 
-export * from "./Error";
+export * from './Error';
 
-import * as Async from "./utilities.async";
+import * as Async from './utilities.async';
 
-import * as Validators from "./utilities.validators";
+import * as Validators from './utilities.validators';
 
 export { Async, Validators };

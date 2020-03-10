@@ -51,7 +51,7 @@ declare function setImmediate(cb: any): void;
 export const nextTick: <T extends any[]>(
     fn: (...args: T) => void,
     ...args: T
-) => void = typeof setImmediate === "function" ?
+) => void = typeof setImmediate === 'function' ?
     setImmediate : function(fn: Function, ...args: any[]): void {
         setTimeout(fn, 0, ...args);
     };

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-// tslint:disable:no-console
-
-import * as Core from "../lib";
+import * as Core from '../lib';
 
 async function makePromise(ms: number): Promise<number> {
 
@@ -29,7 +27,7 @@ async function makePromise(ms: number): Promise<number> {
         return ret;
     }
 
-    throw new Error("Failed.");
+    throw new Error('Failed.');
 }
 
 (async () => {

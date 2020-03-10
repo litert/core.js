@@ -5,5 +5,5 @@
 /.gitignore
 /.npmignore
 /tsconfig.json
-/tslint.json
 /docs/
+/.eslintrc

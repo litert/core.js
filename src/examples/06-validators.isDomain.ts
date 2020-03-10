@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-// tslint:disable:no-console
-
-import * as Core from "../lib";
+import * as Core from '../lib';
 
 const TESTS: string[] = [
-    "",
-    "localhost",
-    "127.0.0.1",
-    "a.com",
-    ".",
-    "com.",
-    ".com",
-    "-",
-    "_",
-    "g_",
-    "g-",
-    "c+",
-    "c!",
-    "a.b.c.d",
-    "www.google.com",
-    ".google.com"
+    '',
+    'localhost',
+    '127.0.0.1',
+    'a.com',
+    '.',
+    'com.',
+    '.com',
+    '-',
+    '_',
+    'g_',
+    'g-',
+    'c+',
+    'c!',
+    'a.b.c.d',
+    'www.google.com',
+    '.google.com'
 ];
 
 const MAX_LENGTH = Math.max(...TESTS.map((x) => x.length)) + 4;
@@ -43,10 +41,10 @@ for (const item of TESTS) {
 
     if (Core.Validators.isDomain(item)) {
 
-        console.info(`${item.padEnd(MAX_LENGTH, " ")} -> Yes`);
+        console.info(`${item.padEnd(MAX_LENGTH, ' ')} -> Yes`);
     }
     else {
 
-        console.error(`${item.padEnd(MAX_LENGTH, " ")} -> No`);
+        console.error(`${item.padEnd(MAX_LENGTH, ' ')} -> No`);
     }
 }

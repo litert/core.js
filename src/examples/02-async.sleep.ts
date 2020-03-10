@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-// tslint:disable:no-console
-
-import * as Core from "../lib";
+import * as Core from '../lib';
 
 (async () => {
 
     console.log(new Date().toISOString());
 
-    const result = await Core.Async.sleep(1000, "cc", 123, true);
+    const result = await Core.Async.sleep(1000, 'cc', 123, true);
 
     console.log(new Date().toISOString());
 

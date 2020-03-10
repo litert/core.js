@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-// tslint:disable:no-console
-
-import * as Core from "../lib";
+import * as Core from '../lib';
 
 Core.Async.nextTick(function(a: string): void {
 
     console.log(a);
 
-}, "world");
+}, 'world');
 
-console.log("hello");
+console.log('hello');

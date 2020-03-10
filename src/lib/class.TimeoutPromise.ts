@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { RawPromise, IPromiseRejector, IPromiseResolver } from "./class.RawPromise";
+import { RawPromise, IPromiseRejector, IPromiseResolver } from './class.RawPromise';
 
 export type ITimeoutResult<T, E> = {
 
-    "error": null;
+    'error': null;
 
-    "value"?: T;
+    'value'?: T;
 
 } | {
 
-    "error": E;
+    'error': E;
 
-    "value": void;
+    'value': void;
 };
 
 export type IPromiseTimeoutResultHandler<T, E> = (result: ITimeoutResult<T, E>) => void;
@@ -37,7 +37,7 @@ export type IPromiseTimeoutResultHandler<T, E> = (result: ITimeoutResult<T, E>) 
  * @deprecated Use `@litert/observable` instead. And this class will be removed in v2.0.0 version.
  */
 export class TimeoutPromise<T = any, E = Error>
-extends RawPromise<T, E> {
+    extends RawPromise<T, E> {
 
     private _timer!: number | null;
 
@@ -99,8 +99,8 @@ extends RawPromise<T, E> {
             if (null === this._timer) {
 
                 this._handleTimeout && this._handleTimeout({
-                    "error": e,
-                    "value": undefined
+                    'error': e,
+                    'value': undefined
                 });
 
                 return;
@@ -120,8 +120,8 @@ extends RawPromise<T, E> {
             if (null === this._timer) {
 
                 this._handleTimeout && this._handleTimeout({
-                    "error": null,
-                    "value": data
+                    'error': null,
+                    'value': data
                 });
 
                 return;

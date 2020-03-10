@@ -256,9 +256,9 @@ Object.defineProperties(this, {
 });
 `;
 
-    if ("captureStackTrace" in Error) {
+    if ('captureStackTrace' in Error) {
 
-        THE_CONSTRUCTOR += `Error.captureStackTrace(this, this.constructor);`;
+        THE_CONSTRUCTOR += 'Error.captureStackTrace(this, this.constructor);';
     }
     else {
 
@@ -270,13 +270,13 @@ Object.defineProperties(this, {
     }
 
     let ret = Function(
-        "code",
-        "name",
-        "message",
-        "metadata",
-        "moduleName",
-        "aliasCodes",
-        "aliases",
+        'code',
+        'name',
+        'message',
+        'metadata',
+        'moduleName',
+        'aliasCodes',
+        'aliases',
         THE_CONSTRUCTOR
     );
 
@@ -291,22 +291,22 @@ Object.defineProperties(this, {
     ): IErrorFullData<DefaultMetadataType> | IErrorData<DefaultMetadataType> {
 
         return withStack ? {
-            "code": this.code,
-            "aliasCodes": this.aliasCodes,
-            "message": this.message,
-            "metadata": this.metadata,
-            "module": this.module,
-            "name": this.name,
-            "aliases": this.aliases,
-            "stack": this.getStackAsArray()
+            'code': this.code,
+            'aliasCodes': this.aliasCodes,
+            'message': this.message,
+            'metadata': this.metadata,
+            'module': this.module,
+            'name': this.name,
+            'aliases': this.aliases,
+            'stack': this.getStackAsArray()
         } : {
-            "code": this.code,
-            "aliasCodes": this.aliasCodes,
-            "message": this.message,
-            "metadata": this.metadata,
-            "module": this.module,
-            "aliases": this.aliases,
-            "name": this.name
+            'code': this.code,
+            'aliasCodes': this.aliasCodes,
+            'message': this.message,
+            'metadata': this.metadata,
+            'module': this.module,
+            'aliases': this.aliases,
+            'name': this.name
         };
     };
 
@@ -314,7 +314,7 @@ Object.defineProperties(this, {
 
         return `Error #${this.code} (${this.name} from ${this.module}): ${this.message}
   Call Stack:
-    ${this.getStackAsArray().join("\n    ")}`;
+    ${this.getStackAsArray().join('\n    ')}`;
     };
 
     return ret;
@@ -438,7 +438,7 @@ implements IErrorHub<M> {
             errors: {},
             module: moduleName,
             baseError: (Function(
-                "BaseError", `class __ extends BaseError {
+                'BaseError', `class __ extends BaseError {
         constructor(code, name, message, metadata, moduleName, aliasCodes, aliases) {
             super(
                 code,
@@ -469,7 +469,7 @@ implements IErrorHub<M> {
 
         if (_this.warningListeners[key]) {
 
-            const TheError = DEFAULT_HUB.get("DUPLICATED_WARNING_LISTENER");
+            const TheError = DEFAULT_HUB.get('DUPLICATED_WARNING_LISTENER');
 
             throw new TheError({
                 message: `Duplicated key of warning listener: ${JSON.stringify(name)}.`
@@ -514,7 +514,7 @@ implements IErrorHub<M> {
 
         const _this = HUB_SECRETS.get(this) as IErrorHubPrivateData;
 
-        if (typeof id !== "undefined") {
+        if (typeof id !== 'undefined') {
 
             return (!!_this.errors[id]) && (e instanceof _this.errors[id]);
         }
@@ -537,7 +537,7 @@ implements IErrorHub<M> {
 
         if (!/^[a-z]\w+$/i.test(name)) {
 
-            const TheError = DEFAULT_HUB.get("INVALID_ERROR_NAME");
+            const TheError = DEFAULT_HUB.get('INVALID_ERROR_NAME');
 
             throw new TheError({
                 message: `Invalid name ${JSON.stringify(name)} for error definition.`
@@ -550,7 +550,7 @@ implements IErrorHub<M> {
         }
         else if (!Number.isSafeInteger(code)) {
 
-            const TheError = DEFAULT_HUB.get("INVALID_ERROR_CODE");
+            const TheError = DEFAULT_HUB.get('INVALID_ERROR_CODE');
 
             throw new TheError({
                 message: `Invalid code ${JSON.stringify(code)} for error definition.`
@@ -563,7 +563,7 @@ implements IErrorHub<M> {
 
         if (_this.errors[name]) {
 
-            const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_NAME");
+            const TheError = DEFAULT_HUB.get('DUPLICATED_ERROR_NAME');
 
             throw new TheError({
                 message: `The name ${JSON.stringify(name)} of new error already exists.`
@@ -576,7 +576,7 @@ implements IErrorHub<M> {
 
                 if (_this.errors[alias]) {
 
-                    const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_NAME");
+                    const TheError = DEFAULT_HUB.get('DUPLICATED_ERROR_NAME');
 
                     throw new TheError({
                         message: `The name ${JSON.stringify(alias)} of new error already exists.`
@@ -587,7 +587,7 @@ implements IErrorHub<M> {
 
         if (_this.errors[code]) {
 
-            const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
+            const TheError = DEFAULT_HUB.get('DUPLICATED_ERROR_CODE');
 
             throw new TheError({
                 message: `The code ${JSON.stringify(code)} of new error already exists.`
@@ -600,7 +600,7 @@ implements IErrorHub<M> {
 
                 if (_this.errors[alias]) {
 
-                    const TheError = DEFAULT_HUB.get("DUPLICATED_ERROR_CODE");
+                    const TheError = DEFAULT_HUB.get('DUPLICATED_ERROR_CODE');
 
                     throw new TheError({
                         message: `The code ${JSON.stringify(alias)} of new error already exists.`
@@ -610,7 +610,7 @@ implements IErrorHub<M> {
         }
 
         _this.errors[code] = _this.errors[name] = (Function(
-            "BaseError", "metadata", "hub", `class ${name} extends BaseError {
+            'BaseError', 'metadata', 'hub', `class ${name} extends BaseError {
     constructor(opts = {}) {
         super(
             ${code},
@@ -701,13 +701,12 @@ return ${name};`
 /**
  * The default name for module of errors, if omitted.
  */
-export const DEFAULT_ERROR_HUB_MODULE = "unknown";
+export const DEFAULT_ERROR_HUB_MODULE = 'unknown';
 
-export const DEFAULT_WARNING_LISTENER_KEY = "litert:errors:hub:default-warning-listener";
+export const DEFAULT_WARNING_LISTENER_KEY = 'litert:errors:hub:default-warning-listener';
 
 export const DEFAULT_WARNING_LISTENER = function(e: IError): void {
 
-    // tslint:disable-next-line: no-console
     console.warn(`WARNING: A warning was emitted, and it may become an error in the future versions.
 ${e}`);
 };
@@ -725,40 +724,40 @@ export function createErrorHub<M extends DefaultMetadataType>(
     );
 }
 
-DEFAULT_HUB = createErrorHub<DefaultMetadataType>("@litert/core");
+DEFAULT_HUB = createErrorHub<DefaultMetadataType>('@litert/core');
 
 DEFAULT_HUB.define(
     null,
-    "INVALID_ERROR_NAME",
-    `Invalid name for error definition.`,
+    'INVALID_ERROR_NAME',
+    'Invalid name for error definition.',
     {}
 );
 
 DEFAULT_HUB.define(
     null,
-    "INVALID_ERROR_CODE",
-    `Invalid code for error definition.`,
+    'INVALID_ERROR_CODE',
+    'Invalid code for error definition.',
     {}
 );
 
 DEFAULT_HUB.define(
     null,
-    "DUPLICATED_ERROR_NAME",
-    `The name of new error already exists.`,
+    'DUPLICATED_ERROR_NAME',
+    'The name of new error already exists.',
     {}
 );
 
 DEFAULT_HUB.define(
     null,
-    "DUPLICATED_ERROR_CODE",
-    `The code of new error already exists.`,
+    'DUPLICATED_ERROR_CODE',
+    'The code of new error already exists.',
     {}
 );
 
 DEFAULT_HUB.define(
     null,
-    "DUPLICATED_WARNING_LISTENER",
-    `The key of warning listener already exists.`,
+    'DUPLICATED_WARNING_LISTENER',
+    'The key of warning listener already exists.',
     {}
 );
 

@@ -14,36 +14,34 @@
  * limitations under the License.
  */
 
-// tslint:disable:no-console
-
-import * as Core from "../lib";
+import * as Core from '../lib';
 
 (async () => {
 
     let ret = new Core.TimeoutPromise<string, Error>(
         100,
-        new Error("TIMEOUT"),
+        new Error('TIMEOUT'),
         true,
         function(result): void {
 
             if (result.value) {
 
-                console.log(`Timeout Result:`, result.value);
+                console.log('Timeout Result:', result.value);
             }
             else if (result.error) {
 
-                console.error(`Timeout Error:`, result.error);
+                console.error('Timeout Error:', result.error);
             }
         }
     );
 
-    setTimeout(ret.resolve, 300, "hello");
+    setTimeout(ret.resolve, 300, 'hello');
 
     try {
 
         await ret.promise;
 
-        console.log("Not timeout.");
+        console.log('Not timeout.');
     }
     catch (e) {
 

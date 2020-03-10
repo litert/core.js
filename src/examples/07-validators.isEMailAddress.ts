@@ -14,32 +14,30 @@
  * limitations under the License.
  */
 
-// tslint:disable:no-console
-
-import * as Core from "../lib";
+import * as Core from '../lib';
 
 const TESTS: string[] = [
-    "@",
-    "@localhost",
-    "@127.0.0.1",
-    "@a.com",
-    "@.",
-    "@com.",
-    "@.com",
-    "@-",
-    "_@",
-    "g@",
-    "g@-",
-    "cccc",
-    "cc..cc@localhost",
-    "a.@b.c.d",
-    "admin@www.google.com",
-    "admin@.google.com",
-    "fenying@litert.org",
-    "c.ff@gmail.com",
-    "hello@gmail.com",
-    "hello..world@gmail.com",
-    "ggg-c@cc.ca"
+    '@',
+    '@localhost',
+    '@127.0.0.1',
+    '@a.com',
+    '@.',
+    '@com.',
+    '@.com',
+    '@-',
+    '_@',
+    'g@',
+    'g@-',
+    'cccc',
+    'cc..cc@localhost',
+    'a.@b.c.d',
+    'admin@www.google.com',
+    'admin@.google.com',
+    'fenying@litert.org',
+    'c.ff@gmail.com',
+    'hello@gmail.com',
+    'hello..world@gmail.com',
+    'ggg-c@cc.ca'
 ];
 
 const MAX_LENGTH = Math.max(...TESTS.map((x) => x.length)) + 4;
@@ -48,10 +46,10 @@ for (const item of TESTS) {
 
     if (Core.Validators.isEMailAddress(item)) {
 
-        console.info(`${item.padEnd(MAX_LENGTH, " ")} -> Yes`);
+        console.info(`${item.padEnd(MAX_LENGTH, ' ')} -> Yes`);
     }
     else {
 
-        console.error(`${item.padEnd(MAX_LENGTH, " ")} -> No`);
+        console.error(`${item.padEnd(MAX_LENGTH, ' ')} -> No`);
     }
 }
