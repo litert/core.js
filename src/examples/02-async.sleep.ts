@@ -16,7 +16,7 @@
 
 import * as Core from '../lib';
 
-(async () => {
+(async (): Promise<void> => {
 
     console.log(new Date().toISOString());
 

@@ -776,7 +776,7 @@ export function getDefaultErrorHub(): IErrorHub<DefaultMetadataType> {
  */
 export function isError<
     M extends DefaultMetadataType = DefaultMetadataType
->(e: any): e is IError<M> {
+>(e: unknown): e is IError<M> {
 
     return e instanceof BaseError;
 }

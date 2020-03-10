@@ -16,7 +16,7 @@
 
 import * as Core from '../lib';
 
-(async () => {
+(async (): Promise<void> => {
 
     let rp = new Core.RawPromise<number>();
 

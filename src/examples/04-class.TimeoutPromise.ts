@@ -16,7 +16,7 @@
 
 import * as Core from '../lib';
 
-(async () => {
+(async (): Promise<void> => {
 
     let ret = new Core.TimeoutPromise<string, Error>(
         100,

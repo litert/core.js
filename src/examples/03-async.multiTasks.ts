@@ -30,7 +30,7 @@ async function makePromise(ms: number): Promise<number> {
     throw new Error('Failed.');
 }
 
-(async () => {
+(async (): Promise<void> => {
 
     const result = await Core.Async.multiTasks(
         Array(10).fill(0).map(
