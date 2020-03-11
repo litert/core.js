@@ -161,6 +161,7 @@
         "no-trailing-spaces": "error",
         "block-spacing":"error",
         "eol-last":"error",
+        "space-before-blocks": "error",
         "indent": "off",
         "@typescript-eslint/indent": ["error", 4, {
             "SwitchCase": 1,
