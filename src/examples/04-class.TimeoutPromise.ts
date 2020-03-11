@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import * as Core from '../lib';
 
 (async (): Promise<void> => {
@@ -48,4 +49,4 @@ import * as Core from '../lib';
         console.error(e);
     }
 
-})();
+})().catch((e) => console.error(e));

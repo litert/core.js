@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import * as Core from '../lib';
 
 const TESTS: string[] = [

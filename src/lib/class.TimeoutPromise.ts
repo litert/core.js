@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RawPromise, IPromiseRejector, IPromiseResolver } from './class.RawPromise';
 
 export type ITimeoutResult<T, E> = {
@@ -98,10 +99,13 @@ export class TimeoutPromise<T = any, E = Error>
              */
             if (null === this._timer) {
 
-                this._handleTimeout && this._handleTimeout({
-                    'error': e,
-                    'value': undefined
-                });
+                if (this._handleTimeout) {
+
+                    this._handleTimeout({
+                        'error': e,
+                        'value': undefined
+                    });
+                }
 
                 return;
             }
@@ -119,10 +123,13 @@ export class TimeoutPromise<T = any, E = Error>
              */
             if (null === this._timer) {
 
-                this._handleTimeout && this._handleTimeout({
-                    'error': null,
-                    'value': data
-                });
+                if (this._handleTimeout) {
+
+                    this._handleTimeout({
+                        'error': null,
+                        'value': data
+                    });
+                }
 
                 return;
             }

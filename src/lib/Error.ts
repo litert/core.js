@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type DefaultMetadataType = Record<string, any>;
 
 /**
@@ -150,7 +151,7 @@ interface IBaseError {
         message: string,
         metadata?: DefaultMetadataType,
         moduleName?: string
-    ): IError<DefaultMetadataType>;
+    ): IError;
 
     name: string;
 
@@ -280,13 +281,14 @@ Object.defineProperties(this, {
         THE_CONSTRUCTOR
     );
 
-    ret.prototype.getStackAsArray = function(this: IError<DefaultMetadataType>): string[] {
+    ret.prototype.getStackAsArray = function(this: IError): string[] {
 
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         return this.stack.split(/\n\s+at /).slice(1);
     };
 
     ret.prototype.toJSON = function(
-        this: IError<DefaultMetadataType>,
+        this: IError,
         withStack?: boolean
     ): IErrorFullData<DefaultMetadataType> | IErrorData<DefaultMetadataType> {
 
@@ -310,7 +312,7 @@ Object.defineProperties(this, {
         };
     };
 
-    ret.prototype.toString = function(this: IError<DefaultMetadataType>): string {
+    ret.prototype.toString = function(this: IError): string {
 
         return `Error #${this.code} (${this.name} from ${this.module}): ${this.message}
   Call Stack:
@@ -452,7 +454,7 @@ implements IErrorHub<M> {
         };
     }
     return __;`
-            ))(BaseError, moduleName) as any
+            ))(BaseError, moduleName)
         });
     }
 
@@ -669,7 +671,7 @@ Object.defineProperties(${name}, {
 });
 
 return ${name};`
-        ))(_this.baseError, metadata, this) as any;
+        ))(_this.baseError, metadata, this);
 
         if (aliasCodes) {
 

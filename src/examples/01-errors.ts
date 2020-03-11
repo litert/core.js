@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import * as Core from '../lib';
 
 const errors = Core.getDefaultErrorHub();
@@ -105,7 +106,7 @@ new MY_TEST_ERROR1().warn();
 
 myErrors.removeWarningListener(Core.DEFAULT_WARNING_LISTENER_KEY);
 
-myErrors.addWarningListener('hello', (e) => console.warn('A wanring was emitted.'));
+myErrors.addWarningListener('hello', (e) => console.warn(`A wanring was emitted: ${e}`));
 
 new MY_TEST_ERROR1().warn();
 

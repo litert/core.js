@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-magic-numbers */
 export type IWaitResult<T, E> = {
 
     success: true;
@@ -65,7 +66,7 @@ export function multiTasks<T, E>(
     tasks: Array<Promise<T>>
 ): Promise<Array<IWaitResult<T, E>>> {
 
-    return new Promise<any>(function(resolve): void {
+    return new Promise<Array<IWaitResult<T, E>>>(function(resolve): void {
 
         let ret: Array<IWaitResult<T, E>> = Array(tasks.length);
 
@@ -82,7 +83,7 @@ export function multiTasks<T, E>(
 
                 if (++done === tasks.length) {
 
-                    setTimeout(resolve, 0, ret);
+                    resolve(ret);
                 }
 
             }).catch(function(e): void {
@@ -94,7 +95,7 @@ export function multiTasks<T, E>(
 
                 if (++done === tasks.length) {
 
-                    setTimeout(resolve, 0, ret);
+                    resolve(ret);
                 }
             });
         }

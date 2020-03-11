@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import * as Core from '../lib';
 
 async function makePromise(ms: number): Promise<number> {
@@ -34,10 +35,10 @@ async function makePromise(ms: number): Promise<number> {
 
     const result = await Core.Async.multiTasks(
         Array(10).fill(0).map(
-            (x) => Math.floor(Math.random() * 1000)
+            () => Math.floor(Math.random() * 1000)
         ).map(makePromise)
     );
 
     console.log(JSON.stringify(result, null, 2));
 
-})();
+})().catch((e) => console.error(e));

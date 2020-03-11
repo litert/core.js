@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import * as Core from '../lib';
 
 (async (): Promise<void> => {
@@ -23,8 +24,8 @@ import * as Core from '../lib';
     /**
      * This couldn't work in v1.0.2.
      */
-    setTimeout(rp.resolve, 1000, 123456);
+    setTimeout(rp.resolve, 1000, 'hello');
 
     console.log(await rp.promise);
 
-})();
+})().catch((e) => console.error(e));
